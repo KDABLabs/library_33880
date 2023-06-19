@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../abstract_view.dart';
 import 'settings_controller.dart';
@@ -8,9 +9,7 @@ import 'settings_controller.dart';
 /// When a user changes a setting, the SettingsController is updated and
 /// Widgets that listen to the SettingsController are rebuilt.
 class SettingsView extends AbstractView {
-  const SettingsView({super.key, required this.controller});
-
-  final SettingsController controller;
+  const SettingsView({super.key});
 
   @override
   AppBar buildAppBar(BuildContext context) {
@@ -21,6 +20,8 @@ class SettingsView extends AbstractView {
 
   @override
   Widget buildBody(BuildContext context) {
+    final SettingsController controller = context.read<SettingsController>();
+
     return Padding(
       padding: const EdgeInsets.all(16),
       // Glue the SettingsController to the theme selection DropdownButton.
