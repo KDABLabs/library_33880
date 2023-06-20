@@ -29,6 +29,9 @@ class SettingsController with ChangeNotifier {
           ? null
           : accounts[currentAccountIndex];
 
+  Account? accountAt(int index) =>
+      index < 0 || index >= accounts.length ? null : accounts[index];
+
   /// Load the user's settings from the SettingsService. It may load from a
   /// local database or the internet. The controller only knows it can load the
   /// settings from the service.
