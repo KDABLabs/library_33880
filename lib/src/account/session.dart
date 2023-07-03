@@ -3,7 +3,12 @@ import 'package:http/http.dart' as http;
 import 'account.dart';
 
 class Session {
-  Session(this.account, { this.cookies = const { 'cookielawinfo-checkbox-necessary': 'yes', 'cookielawinfo-checkbox-non-necessary': 'no', 'viewed_cookie_policy': 'yes' } });
+  Session(this.account,
+      {this.cookies = const {
+        'cookielawinfo-checkbox-necessary': 'yes',
+        'cookielawinfo-checkbox-non-necessary': 'no',
+        'viewed_cookie_policy': 'yes'
+      }});
 
   final Account account;
   Map<String, String> cookies;
@@ -16,7 +21,7 @@ class Session {
     StringBuffer result = StringBuffer();
 
     bool first = true;
-    
+
     cookies.forEach((key, value) {
       if (!first) {
         result.write('; ');
@@ -39,11 +44,13 @@ class Session {
   }
 
   Future<http.Response> logIn() {
-    return http.post(loginUri(), headers: { 'Cookies': cookiesAsString() }, body: { 'login': '$account.login', 'passwd': '$account.password' });
+    return http.post(loginUri(),
+        headers: {'Cookies': cookiesAsString()},
+        body: {'login': '$account.login', 'passwd': '$account.password'});
   }
 
   Future<http.Response> logOut() {
-    return http.get(loginUri(), headers: { 'Cookies': cookiesAsString() });
+    return http.get(loginUri(), headers: {'Cookies': cookiesAsString()});
   }
 }
 
