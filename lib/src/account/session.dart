@@ -1,17 +1,23 @@
+import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import 'account.dart';
+import '../books/book.dart';
 
 class Session {
-  Session(this.account,
-      {this.cookies = const {
-        'cookielawinfo-checkbox-necessary': 'yes',
-        'cookielawinfo-checkbox-non-necessary': 'no',
-        'viewed_cookie_policy': 'yes'
-      }});
+  Session(this.account, {Map<String, String>? cookies})
+      : this.cookies = cookies ??
+            {
+              'cookielawinfo-checkbox-necessary': 'yes',
+              'cookielawinfo-checkbox-non-necessary': 'no',
+              'viewed_cookie_policy': 'yes'
+            };
 
   final Account account;
   Map<String, String> cookies;
+  List<Book> books = List<Book>.empty(
+    growable: true,
+  );
 
   String apiHost() {
     return 'bibliotheques.cdc-portesentredeuxmers.fr';
@@ -43,16 +49,86 @@ class Session {
     return Uri.https(apiHost(), 'cassioweb/account/logout');
   }
 
+  Uri accountUri() {
+    return Uri.https(apiHost(), 'cassioweb/account');
+  }
+
   Future<http.Response> logIn() {
-    return http.post(loginUri(),
-        headers: {'Cookies': cookiesAsString()},
-        body: {'login': '$account.login', 'passwd': '$account.password'});
+    return http.post(
+      loginUri(),
+      headers: {
+        'Cookies': cookiesAsString(),
+      },
+      body: {
+        'login': account.login,
+        'passwd': account.password,
+        'submit': 'valider',
+      },
+    );
   }
 
   Future<http.Response> logOut() {
-    return http.get(loginUri(), headers: {'Cookies': cookiesAsString()});
+    return http.get(
+      loginUri(),
+      headers: {
+        'Cookies': cookiesAsString(),
+      },
+    );
+  }
+
+  Future<http.Response> status() {
+    return http.get(
+      accountUri(),
+      headers: {
+        'Cookies': cookiesAsString(),
+      },
+    );
+  }
+
+  Future<bool> getBooks() async {
+    // var books = await status();
+
+    // if (books.statusCode == 200) {
+    //   print('Get books from session');
+    //   print(books.statusCode);
+    //   print(books.reasonPhrase);
+    //   print(books.headers);
+    //   print(books.request);
+    //   print(books.request?.contentLength);
+    //   print(books.body);
+    //   return books;
+    // }
+
+    var login = await logIn();
+
+    if (login.statusCode != 302) {
+      print('Can not log in');
+      return false;
+    }
+
+    final session = Cookie.fromSetCookieValue(login.headers['set-cookie']!);
+
+    if (session.name.isNotEmpty) {
+      cookies[session.name] = session.value;
+      print('Updated session');
+    }
+
+    // print(login.statusCode);
+    // print(login.reasonPhrase);
+    // print(login.headers);
+    // print(login.request);
+    // print(login.request?.contentLength);
+    // print(login.body);
+
+    books.add(const Book(
+      42,
+    ));
+
+    return true;
   }
 }
+
+// Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36
 
 /*
 Login (POST)
