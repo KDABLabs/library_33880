@@ -80,8 +80,10 @@ abstract class AbstractView extends StatelessWidget {
                     ),
                     iconSize: iconSize,
                     color: entry.value.color,
-                    onPressed: () =>
-                        settingsController.updateCurrentAccountIndex(entry.key),
+                    onPressed: () {
+                      settingsController.updateCurrentAccountIndex(entry.key);
+                      appState.setCurrentAccount(settingsController.currentAccount);
+                    },
                   ),
                 );
               }).toList(),
@@ -102,8 +104,11 @@ abstract class AbstractView extends StatelessWidget {
                       entry.value.displayName,
                     ),
                     titleTextStyle: entryStyle,
-                    onTap: () =>
-                        settingsController.updateCurrentAccountIndex(entry.key),
+                    onTap: () {
+                      settingsController.updateCurrentAccountIndex(entry.key);
+                      appState
+                          .setCurrentAccount(settingsController.currentAccount);
+                    },
                   );
                 }).toList(),
                 ListTile(

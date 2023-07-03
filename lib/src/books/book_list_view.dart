@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:library_33880/src/app_state.dart';
+import 'package:provider/provider.dart';
 
 import '../abstract_view.dart';
 import '../constants.dart';
-import 'book.dart';
 
 /// Displays a list of Books.
 class BooksListView extends AbstractView {
   const BooksListView({
     super.key,
-    this.items = const [Book(1), Book(2), Book(3)],
   });
-
-  final Books items;
 
   @override
   AppBar buildAppBar(BuildContext context) {
@@ -33,6 +31,8 @@ class BooksListView extends AbstractView {
 
   @override
   Widget buildBody(BuildContext context) {
+    final appState = context.watch<AppState>();
+
     // To work with lists that may contain a large number of items, it’s best
     // to use the ListView.builder constructor.
     //
@@ -44,12 +44,12 @@ class BooksListView extends AbstractView {
       // scroll position when a user leaves and returns to the app after it
       // has been killed while running in the background.
       restorationId: 'booksListView',
-      itemCount: items.length,
+      itemCount: appState.session != null ? appState.session?.books.length : 0,
       itemBuilder: (BuildContext context, int index) {
-        final item = items[index];
+        final book = appState.session?.books[index];
 
         return ListTile(
-          title: Text('Book ${item.id}'),
+          title: Text('Book ${book?.id}'),
           leading: const CircleAvatar(
             // Display the Flutter Logo image asset.
             foregroundImage: AssetImage('assets/images/flutter_logo.png'),
