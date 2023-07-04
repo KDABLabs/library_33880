@@ -20,7 +20,7 @@ class AppState extends ChangeNotifier {
   void setCurrentAccount(Account? account) {
     if (account != null) {
       session = Session(account);
-      session?.getBooks().then(
+      session?.getData().then(
             (value) => notifyListeners(),
           );
     } else {

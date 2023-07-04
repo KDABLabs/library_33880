@@ -5,16 +5,16 @@ import 'package:provider/provider.dart';
 import '../abstract_view.dart';
 import '../constants.dart';
 
-/// Displays a list of Books.
-class BooksListView extends AbstractView {
-  const BooksListView({
+/// Displays a list of Media list.
+class MediaListView extends AbstractView {
+  const MediaListView({
     super.key,
   });
 
   @override
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
-        title: const Text('Books'),
+        title: const Text('Media'),
         actions: [
           IconButton(
             icon: const Icon(Icons.settings),
@@ -43,13 +43,13 @@ class BooksListView extends AbstractView {
       // Providing a restorationId allows the ListView to restore the
       // scroll position when a user leaves and returns to the app after it
       // has been killed while running in the background.
-      restorationId: 'booksListView',
-      itemCount: appState.session != null ? appState.session?.books.length : 0,
+      restorationId: 'mediaListView',
+      itemCount: appState.session != null ? appState.session?.mediaList.length : 0,
       itemBuilder: (BuildContext context, int index) {
-        final book = appState.session?.books[index];
+        final media = appState.session?.mediaList[index];
 
         return ListTile(
-          title: Text('Book ${book?.id}'),
+          title: Text('${media?.title}'),
           leading: const CircleAvatar(
             // Display the Flutter Logo image asset.
             foregroundImage: AssetImage('assets/images/flutter_logo.png'),
@@ -60,7 +60,7 @@ class BooksListView extends AbstractView {
             // background, the navigation stack is restored.
             Navigator.restorablePushNamed(
               context,
-              ConstantsRoutes.bookDetails,
+              ConstantsRoutes.mediaDetails,
             );
           }
         );

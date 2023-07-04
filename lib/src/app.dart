@@ -5,8 +5,8 @@ import 'package:provider/provider.dart';
 
 import 'app_state.dart';
 import 'constants.dart';
-import 'books/book_details_view.dart';
-import 'books/book_list_view.dart';
+import 'media/media_details_view.dart';
+import 'media/media_list_view.dart';
 import 'settings/settings_controller.dart';
 import 'settings/settings_view.dart';
 
@@ -69,11 +69,11 @@ class MyApp extends StatelessWidget {
                   switch (routeSettings.name) {
                     case ConstantsRoutes.settings:
                       return const SettingsView();
-                    case ConstantsRoutes.bookDetails:
-                      return const BookDetailsView();
-                    case ConstantsRoutes.books:
+                    case ConstantsRoutes.mediaDetails:
+                      return const MediaDetailsView();
+                    case ConstantsRoutes.media:
                     default:
-                      return const BooksListView();
+                      return const MediaListView();
                   }
                 },
               );

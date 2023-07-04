@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import '../abstract_view.dart';
 import '../constants.dart';
 
-/// Displays detailed information about a Book.
-class BookDetailsView extends AbstractView {
-  const BookDetailsView({super.key});
+/// Displays detailed information about a Media.
+class MediaDetailsView extends AbstractView {
+  const MediaDetailsView({super.key});
 
   @override
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
-      title: const Text('Book Details'),
+      title: const Text('Media Details'),
       actions: [
         IconButton(
           icon: const Icon(Icons.settings),

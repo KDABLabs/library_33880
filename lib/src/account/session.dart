@@ -2,11 +2,11 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import 'account.dart';
-import '../books/book.dart';
+import '../media/media.dart';
 
 class Session {
   Session(this.account, {Map<String, String>? cookies})
-      : this.cookies = cookies ??
+      : cookies = cookies ??
             {
               'cookielawinfo-checkbox-necessary': 'yes',
               'cookielawinfo-checkbox-non-necessary': 'no',
@@ -15,7 +15,7 @@ class Session {
 
   final Account account;
   Map<String, String> cookies;
-  List<Book> books = List<Book>.empty(
+  MediaList mediaList = MediaList.empty(
     growable: true,
   );
 
@@ -85,18 +85,18 @@ class Session {
     );
   }
 
-  Future<bool> getBooks() async {
-    // var books = await status();
+  Future<bool> getData() async {
+    // var data = await status();
 
-    // if (books.statusCode == 200) {
-    //   print('Get books from session');
-    //   print(books.statusCode);
-    //   print(books.reasonPhrase);
-    //   print(books.headers);
-    //   print(books.request);
-    //   print(books.request?.contentLength);
-    //   print(books.body);
-    //   return books;
+    // if (data.statusCode == 200) {
+    //   print('Get data from session');
+    //   print(data.statusCode);
+    //   print(data.reasonPhrase);
+    //   print(data.headers);
+    //   print(data.request);
+    //   print(data.request?.contentLength);
+    //   print(data.body);
+    //   return data;
     // }
 
     var login = await logIn();
@@ -120,8 +120,11 @@ class Session {
     // print(login.request?.contentLength);
     // print(login.body);
 
-    books.add(const Book(
-      42,
+    mediaList.add(Media(
+      'L',
+      'Jungle Book',
+      DateTime.now(),
+      DateTime.now(),
     ));
 
     return true;
