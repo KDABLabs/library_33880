@@ -122,6 +122,20 @@ class Session {
 
     mediaList.add(Media(
       'L',
+      'Les 3 Mousquetaires',
+      DateTime.now(),
+      DateTime.now(),
+    ));
+
+    mediaList.add(Media(
+      'A',
+      'Masterboy - Generation Of Love',
+      DateTime.now(),
+      DateTime.now(),
+    ));
+
+    mediaList.add(Media(
+      'V',
       'Jungle Book',
       DateTime.now(),
       DateTime.now(),

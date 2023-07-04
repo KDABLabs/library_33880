@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../abstract_view.dart';
+import '../app_state.dart';
 import '../constants.dart';
 
 /// Displays detailed information about a Media.
 class MediaDetailsView extends AbstractView {
-  const MediaDetailsView({super.key});
+  const MediaDetailsView(this.title, {super.key});
+
+  final String title;
 
   @override
   AppBar buildAppBar(BuildContext context) {
@@ -27,8 +31,12 @@ class MediaDetailsView extends AbstractView {
 
   @override
   Widget buildBody(BuildContext context) {
-    return const Center(
-      child: Text('More Information Here'),
+    final appState = context.read<AppState>();
+    final mediaList = appState.session!.mediaList;
+    final media = mediaList.firstWhere((book) => book.title == title);
+
+    return Center(
+      child: Text(media.title),
     );
   }
 }

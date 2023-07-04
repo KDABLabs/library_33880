@@ -72,7 +72,8 @@ class MyApp extends StatelessWidget {
                     case ConstantsRoutes.settings:
                       return const SettingsView();
                     case ConstantsRoutes.mediaDetails:
-                      return const MediaDetailsView();
+                      return MediaDetailsView(
+                          routeSettings.arguments as String);
                     case ConstantsRoutes.media:
                     default:
                       return const MediaListView();
