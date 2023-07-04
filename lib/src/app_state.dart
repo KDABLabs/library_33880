@@ -4,6 +4,10 @@ import 'account/account.dart';
 import 'account/session.dart';
 
 class AppState extends ChangeNotifier {
+  AppState({Account? account}) {
+    setCurrentAccount(account);
+  }
+
   bool expandAccounts = false;
   Session? session;
 

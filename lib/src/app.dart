@@ -16,14 +16,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final settingsController = context.watch<SettingsController>();
+
     // Glue the SettingsController to the MaterialApp.
     //
     // The AnimatedBuilder Widget listens to the SettingsController for changes.
     // Whenever the user updates their settings, the MaterialApp is rebuilt.
     return ChangeNotifierProvider(
-      create: (context) => AppState(),
+      create: (context) => AppState(account: settingsController.currentAccount),
       child: AnimatedBuilder(
-        animation: context.watch<SettingsController>(),
+        animation: settingsController,
         builder: (BuildContext context, Widget? child) {
           return MaterialApp(
             // Providing a restorationScopeId allows the Navigator built by the
