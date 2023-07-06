@@ -1,7 +1,9 @@
+import 'package:intl/intl.dart' as intl;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../account/account.dart';
+import '../account/information.dart';
 import '../app_state.dart';
 import '../constants.dart';
 import '../settings/settings_controller.dart';
@@ -30,6 +32,8 @@ abstract class AbstractView extends StatelessWidget {
       ),
     );
     const double iconSize = 40.0;
+    final formatter = intl.DateFormat('dd / MM / yyyy');
+    final information = appState.session?.information ?? Information.empty();
 
     return Drawer(
       child: ListView(
@@ -160,6 +164,69 @@ abstract class AbstractView extends StatelessWidget {
             onTap: () {
               Navigator.pop(context);
             },
+          ),
+          Visibility(
+            visible: !appState.expandAccounts &&
+                appState.session?.information != null,
+            child: Column(
+              children: [
+                const Divider(),
+                ListTile(
+                  leading: const Icon(
+                    Icons.card_membership,
+                  ),
+                  title: Text(
+                    information.cardNumber,
+                  ),
+                  titleTextStyle: entryStyle,
+                ),
+                ListTile(
+                  leading: const Icon(
+                    Icons.app_registration,
+                  ),
+                  title: Text(
+                    formatter.format(information.registrationDateTime),
+                  ),
+                  titleTextStyle: entryStyle,
+                ),
+                ListTile(
+                  leading: const Icon(
+                    Icons.date_range,
+                  ),
+                  title: Text(
+                    formatter.format(information.renewDateTime),
+                  ),
+                  titleTextStyle: entryStyle,
+                ),
+                ListTile(
+                  leading: const Icon(
+                    Icons.location_city,
+                  ),
+                  title: Text(
+                    '${information.address}\n${information.zipCode} ${information.city}',
+                  ),
+                  titleTextStyle: entryStyle,
+                ),
+                ListTile(
+                  leading: const Icon(
+                    Icons.phone_android,
+                  ),
+                  title: Text(
+                    information.phoneNumber,
+                  ),
+                  titleTextStyle: entryStyle,
+                ),
+                ListTile(
+                  leading: const Icon(
+                    Icons.mail,
+                  ),
+                  title: Text(
+                    information.email,
+                  ),
+                  titleTextStyle: entryStyle,
+                ),
+              ],
+            ),
           ),
         ],
       ),
