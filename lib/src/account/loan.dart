@@ -1,6 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:html/dom.dart' as dom;
-import 'package:flutter/material.dart';
 
 class Loan {
   const Loan(
@@ -110,6 +110,29 @@ class Loan {
         cols[1].text,
         formatter.parse(cols[2].text),
         formatter.parse(cols[3].text),
+      ));
+    }
+
+    if (kDebugMode && loans.isEmpty) {
+      loans.add(Loan(
+        'L',
+        'Les 3 Mousquetaires',
+        DateTime.now(),
+        DateTime.now(),
+      ));
+
+      loans.add(Loan(
+        'A',
+        'Masterboy - Generation Of Love',
+        DateTime.now(),
+        DateTime.now(),
+      ));
+
+      loans.add(Loan(
+        'V',
+        'Jungle Book',
+        DateTime.now(),
+        DateTime.now(),
       ));
     }
 

@@ -1,6 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:html/dom.dart' as dom;
-import 'package:flutter/material.dart';
 
 class Reservation {
   const Reservation(
@@ -89,6 +89,23 @@ class Reservation {
         cols[1].text,
         // formatter.parse(cols[2].text),
         // formatter.parse(cols[3].text),
+      ));
+    }
+
+    if (kDebugMode && reservations.isEmpty) {
+      reservations.add(const Reservation(
+        'L',
+        'Le Dernier Des Mohicans',
+      ));
+
+      reservations.add(const Reservation(
+        'A',
+        'E-Type - Greatests Hits',
+      ));
+
+      reservations.add(const Reservation(
+        'V',
+        'Rocky I',
       ));
     }
 
