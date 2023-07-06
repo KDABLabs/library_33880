@@ -19,7 +19,7 @@ class Reservation {
     };
   }
 
-  static List<Reservation>? parse(dom.Document document) {
+  static List<Reservation>? parse(dom.Document document, useFakeItems) {
     /*
       <div class="result">
           <div class="resultheader"><strong>Mes réservations en cours</strong> (total 0)</div>
@@ -95,7 +95,7 @@ class Reservation {
       ));
     }
 
-    if (kDebugMode && reservations.isEmpty) {
+    if (useFakeItems && reservations.isEmpty) {
       reservations.add(const Reservation(
         'L',
         'Le Dernier Des Mohicans',

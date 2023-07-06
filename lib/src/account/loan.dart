@@ -29,7 +29,7 @@ class Loan {
     };
   }
 
-  static List<Loan>? parse(dom.Document document) {
+  static List<Loan>? parse(dom.Document document, useFakeItems) {
     /*
       <div class="result">
           <div class="resultheader"><strong>Mes prêts</strong> (total 2)
@@ -122,7 +122,7 @@ class Loan {
       ));
     }
 
-    if (kDebugMode && loans.isEmpty) {
+    if (useFakeItems && loans.isEmpty) {
       loans.add(Loan(
         'L',
         'Les 3 Mousquetaires',

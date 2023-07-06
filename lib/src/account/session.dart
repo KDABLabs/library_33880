@@ -14,6 +14,7 @@ class Session {
   Information? information;
   List<Reservation>? reservations;
   List<Loan>? loans;
+  static const bool useFakeItems = false; //kDebugMode;
 
   Session(this.account, {Map<String, String>? cookies})
       : cookies = cookies ??
@@ -130,8 +131,8 @@ class Session {
         }
 
         information = Information.parse(document);
-        reservations = Reservation.parse(document);
-        loans = Loan.parse(document);
+        reservations = Reservation.parse(document, useFakeItems);
+        loans = Loan.parse(document, useFakeItems);
 
         return information != null && reservations != null && loans != null;
       } else {
