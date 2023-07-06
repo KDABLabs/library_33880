@@ -16,6 +16,10 @@ class Loan {
     this.loanDateTime,
   );
 
+  bool isLate() {
+    return DateTime.now().isAfter(returnDateTime);
+  }
+
   Map<String, dynamic> toJson() {
     return {
       'kind': kind,
