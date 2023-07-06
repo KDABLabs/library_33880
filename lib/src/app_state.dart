@@ -22,6 +22,8 @@ class AppState extends ChangeNotifier {
   }
 
   void setCurrentAccount(Account? account) {
+    expandAccounts = false;
+    
     if (account != null) {
       session = Session(account);
       session!.getData().then(
