@@ -8,6 +8,8 @@ import 'constants.dart';
 import 'settings/settings_controller.dart';
 import 'views/loan_details_view.dart';
 import 'views/loan_list_view.dart';
+import 'views/reservation_details_view.dart';
+import 'views/reservation_list_view.dart';
 import 'views/settings_view.dart';
 
 /// The Widget that configures your application.
@@ -71,6 +73,11 @@ class MyApp extends StatelessWidget {
                   switch (routeSettings.name) {
                     case ConstantsRoutes.settings:
                       return const SettingsView();
+                    case ConstantsRoutes.reservationDetails:
+                      return ReservationDetailsView(
+                          routeSettings.arguments as String);
+                    case ConstantsRoutes.reservations:
+                      return const ReservationListView();
                     case ConstantsRoutes.loanDetails:
                       return LoanDetailsView(routeSettings.arguments as String);
                     case ConstantsRoutes.loans:

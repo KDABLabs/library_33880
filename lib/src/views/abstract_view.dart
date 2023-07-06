@@ -135,9 +135,8 @@ abstract class AbstractView extends StatelessWidget {
               'Reservations',
             ),
             titleTextStyle: entryStyle,
-            onTap: () {
-              Navigator.pop(context);
-            },
+            onTap: () => Navigator.restorablePushNamed(
+                context, ConstantsRoutes.reservations),
           ),
           ListTile(
             leading: const Icon(
@@ -147,9 +146,8 @@ abstract class AbstractView extends StatelessWidget {
               'Loans',
             ),
             titleTextStyle: entryStyle,
-            onTap: () {
-              Navigator.pop(context);
-            },
+            onTap: () =>
+                Navigator.restorablePushNamed(context, ConstantsRoutes.loans),
           ),
           ListTile(
             leading: const Icon(
