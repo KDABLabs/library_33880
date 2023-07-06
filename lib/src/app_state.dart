@@ -4,33 +4,36 @@ import 'account/account.dart';
 import 'account/session.dart';
 
 class AppState extends ChangeNotifier {
+  bool _expandAccounts = false;
+  Session? _session;
+
   AppState({Account? account}) {
     setCurrentAccount(account);
   }
 
-  bool expandAccounts = false;
-  Session? session;
+  bool get expandAccounts => _expandAccounts;
+  Session? get session => _session;
 
   void setAccountsExpanded(bool expanded) {
-    if (expandAccounts == expanded) {
+    if (_expandAccounts == expanded) {
       return;
     }
 
-    expandAccounts = expanded;
+    _expandAccounts = expanded;
 
     notifyListeners();
   }
 
   void setCurrentAccount(Account? account) {
-    expandAccounts = false;
-    
+    _expandAccounts = false;
+
     if (account != null) {
-      session = Session(account);
-      session!.getData().then(
+      _session = Session(account);
+      _session!.getData().then(
             (value) => notifyListeners(),
           );
     } else {
-      session = null;
+      _session = null;
     }
 
     notifyListeners();

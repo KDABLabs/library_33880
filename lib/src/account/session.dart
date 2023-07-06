@@ -9,6 +9,12 @@ import 'loan.dart';
 import 'reservation.dart';
 
 class Session {
+  final Account account;
+  final Map<String, String> cookies;
+  Information? information;
+  List<Reservation>? reservations;
+  List<Loan>? loans;
+
   Session(this.account, {Map<String, String>? cookies})
       : cookies = cookies ??
             {
@@ -16,12 +22,6 @@ class Session {
               'cookielawinfo-checkbox-non-necessary': 'no',
               'viewed_cookie_policy': 'yes'
             };
-
-  final Account account;
-  final Map<String, String> cookies;
-  Information? information;
-  List<Reservation>? reservations;
-  List<Loan>? loans;
 
   String apiHost() {
     return 'bibliotheques.cdc-portesentredeuxmers.fr';

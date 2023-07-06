@@ -3,6 +3,16 @@ import 'package:html/dom.dart' as dom;
 import 'package:flutter/material.dart';
 
 class Information {
+  final String cardNumber;
+  final DateTime registrationDateTime;
+  final DateTime renewDateTime;
+  final String address;
+  final int zipCode;
+  final String city;
+  final String phoneNumber;
+  final String email;
+  static final formatter = intl.DateFormat('dd / MM / yyyy');
+
   const Information(
     this.cardNumber,
     this.registrationDateTime,
@@ -95,8 +105,6 @@ class Information {
       return null;
     }
 
-    final formatter = intl.DateFormat('dd / MM / yyyy');
-
     return Information(
       infoList.children[0].nodes[1].text!,
       formatter.parse(infoList.children[1].nodes[1].text!),
@@ -108,13 +116,4 @@ class Information {
       infoList.children[7].nodes[1].text!,
     );
   }
-
-  final String cardNumber;
-  final DateTime registrationDateTime;
-  final DateTime renewDateTime;
-  final String address;
-  final int zipCode;
-  final String city;
-  final String phoneNumber;
-  final String email;
 }

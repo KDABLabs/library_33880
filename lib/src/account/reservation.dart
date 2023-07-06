@@ -3,6 +3,10 @@ import 'package:intl/intl.dart' as intl;
 import 'package:html/dom.dart' as dom;
 
 class Reservation {
+  final String kind;
+  final String title;
+  static final formatter = intl.DateFormat('dd/MM/yyyy');
+
   const Reservation(
     this.kind,
     this.title,
@@ -78,7 +82,6 @@ class Reservation {
     }
 
     final rows = table.getElementsByTagName('tr');
-    final formatter = intl.DateFormat('dd/MM/yyyy');
     final reservations = List<Reservation>.empty(growable: true);
 
     // Skip first row - it's header
@@ -111,7 +114,4 @@ class Reservation {
 
     return reservations;
   }
-
-  final String kind;
-  final String title;
 }

@@ -8,9 +8,9 @@ import '../constants.dart';
 
 /// Displays detailed information about a Loan.
 class LoanDetailsView extends AbstractView {
-  const LoanDetailsView(this.title, {super.key});
-
   final String title;
+  
+  const LoanDetailsView(this.title, {super.key});
 
   @override
   AppBar buildAppBar(BuildContext context) {

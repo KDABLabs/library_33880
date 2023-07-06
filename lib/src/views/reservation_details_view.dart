@@ -8,9 +8,9 @@ import '../constants.dart';
 
 /// Displays detailed information about a Reservation.
 class ReservationDetailsView extends AbstractView {
-  const ReservationDetailsView(this.title, {super.key});
-
   final String title;
+  
+  const ReservationDetailsView(this.title, {super.key});
 
   @override
   AppBar buildAppBar(BuildContext context) {

@@ -3,6 +3,12 @@ import 'package:intl/intl.dart' as intl;
 import 'package:html/dom.dart' as dom;
 
 class Loan {
+  final String kind;
+  final String title;
+  final DateTime returnDateTime;
+  final DateTime loanDateTime;
+  static final formatter = intl.DateFormat('dd/MM/yyyy');
+
   const Loan(
     this.kind,
     this.title,
@@ -99,7 +105,6 @@ class Loan {
     }
 
     final rows = table.getElementsByTagName('tr');
-    final formatter = intl.DateFormat('dd/MM/yyyy');
     final List<Loan> loans = List<Loan>.empty(growable: true);
 
     // Skip first row - it's header
@@ -138,9 +143,4 @@ class Loan {
 
     return loans;
   }
-
-  final String kind;
-  final String title;
-  final DateTime returnDateTime;
-  final DateTime loanDateTime;
 }
