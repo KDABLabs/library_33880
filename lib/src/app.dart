@@ -5,10 +5,10 @@ import 'package:provider/provider.dart';
 
 import 'app_state.dart';
 import 'constants.dart';
-import 'media/media_details_view.dart';
-import 'media/media_list_view.dart';
 import 'settings/settings_controller.dart';
-import 'settings/settings_view.dart';
+import 'views/loan_details_view.dart';
+import 'views/loan_list_view.dart';
+import 'views/settings_view.dart';
 
 /// The Widget that configures your application.
 class MyApp extends StatelessWidget {
@@ -71,12 +71,11 @@ class MyApp extends StatelessWidget {
                   switch (routeSettings.name) {
                     case ConstantsRoutes.settings:
                       return const SettingsView();
-                    case ConstantsRoutes.mediaDetails:
-                      return MediaDetailsView(
-                          routeSettings.arguments as String);
-                    case ConstantsRoutes.media:
+                    case ConstantsRoutes.loanDetails:
+                      return LoanDetailsView(routeSettings.arguments as String);
+                    case ConstantsRoutes.loans:
                     default:
-                      return const MediaListView();
+                      return const LoanListView();
                   }
                 },
               );

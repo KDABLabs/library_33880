@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'account/account.dart';
-import 'app_state.dart';
-import 'constants.dart';
-import 'settings/settings_controller.dart';
+import '../account/account.dart';
+import '../app_state.dart';
+import '../constants.dart';
+import '../settings/settings_controller.dart';
 
 abstract class AbstractView extends StatelessWidget {
   const AbstractView({super.key});
@@ -82,7 +82,8 @@ abstract class AbstractView extends StatelessWidget {
                     color: entry.value.color,
                     onPressed: () {
                       settingsController.updateCurrentAccountIndex(entry.key);
-                      appState.setCurrentAccount(settingsController.currentAccount);
+                      appState
+                          .setCurrentAccount(settingsController.currentAccount);
                     },
                   ),
                 );
@@ -128,18 +129,6 @@ abstract class AbstractView extends StatelessWidget {
           ),
           ListTile(
             leading: const Icon(
-              Icons.home,
-            ),
-            title: const Text(
-              'Books',
-            ),
-            titleTextStyle: entryStyle,
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
-          ListTile(
-            leading: const Icon(
               Icons.train,
             ),
             title: const Text(
@@ -152,7 +141,19 @@ abstract class AbstractView extends StatelessWidget {
           ),
           ListTile(
             leading: const Icon(
-              Icons.train,
+              Icons.shelves,
+            ),
+            title: const Text(
+              'Loans',
+            ),
+            titleTextStyle: entryStyle,
+            onTap: () {
+              Navigator.pop(context);
+            },
+          ),
+          ListTile(
+            leading: const Icon(
+              Icons.search,
             ),
             title: const Text(
               'Search',

@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:library_33880/src/app_state.dart';
 import 'package:provider/provider.dart';
 
-import '../abstract_view.dart';
+import 'abstract_view.dart';
+import '../app_state.dart';
 import '../constants.dart';
 
-/// Displays a list of Media list.
-class MediaListView extends AbstractView {
-  const MediaListView({
+/// Displays a list of Loan.
+class LoanListView extends AbstractView {
+  const LoanListView({
     super.key,
   });
 
   @override
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
-      title: const Text('Media'),
+      title: const Text('Loans'),
       actions: [
         IconButton(
           icon: const Icon(Icons.settings),
@@ -37,13 +37,13 @@ class MediaListView extends AbstractView {
     final appState = context.watch<AppState>();
     final session = appState.session;
 
-    if (session == null) {
+    if (session == null || session.loans == null) {
       return const Center(
         child: Text('No valid session yet...'),
       );
-    } else if (session.mediaList.isEmpty) {
+    } else if (session.loans!.isEmpty) {
       return const Center(
-        child: Text('There is no media in your library'),
+        child: Text('There is no loan in your library'),
       );
     }
 
@@ -57,15 +57,15 @@ class MediaListView extends AbstractView {
       // Providing a restorationId allows the ListView to restore the
       // scroll position when a user leaves and returns to the app after it
       // has been killed while running in the background.
-      restorationId: 'mediaListView',
-      itemCount: appState.session!.mediaList.length,
+      restorationId: 'loanListView',
+      itemCount: appState.session!.loans!.length,
       itemBuilder: (BuildContext context, int index) {
-        final media = appState.session!.mediaList[index];
+        final loan = appState.session!.loans![index];
 
         return ListTile(
-          title: Text(media.title),
+          title: Text(loan.title),
           leading: Image.asset(
-            'assets/images/${media.kind}.png',
+            'assets/images/${loan.kind}.png',
             width: 38,
             height: 38,
           ),
@@ -75,8 +75,8 @@ class MediaListView extends AbstractView {
             // background, the navigation stack is restored.
             Navigator.restorablePushNamed(
               context,
-              ConstantsRoutes.mediaDetails,
-              arguments: media.title,
+              ConstantsRoutes.loanDetails,
+              arguments: loan.title,
             );
           },
         );

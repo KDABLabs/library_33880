@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../abstract_view.dart';
+import 'abstract_view.dart';
+import '../account/loan.dart';
 import '../app_state.dart';
 import '../constants.dart';
 
-/// Displays detailed information about a Media.
-class MediaDetailsView extends AbstractView {
-  const MediaDetailsView(this.title, {super.key});
+/// Displays detailed information about a Loan.
+class LoanDetailsView extends AbstractView {
+  const LoanDetailsView(this.title, {super.key});
 
   final String title;
 
   @override
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
-      title: const Text('Media Details'),
+      title: const Text('Loan Details'),
       actions: [
         IconButton(
           icon: const Icon(Icons.settings),
@@ -31,12 +32,22 @@ class MediaDetailsView extends AbstractView {
 
   @override
   Widget buildBody(BuildContext context) {
+    final notFoundLoan = Loan(
+      'L',
+      'The loan "$title" can no longer be found.',
+      DateTime.now(),
+      DateTime.now(),
+    );
     final appState = context.read<AppState>();
-    final mediaList = appState.session!.mediaList;
-    final media = mediaList.firstWhere((book) => book.title == title);
+    final loans = appState.session?.loans;
+    final loan = loans?.firstWhere(
+          (loan) => loan.title == title,
+          orElse: () => notFoundLoan,
+        ) ??
+        notFoundLoan;
 
     return Center(
-      child: Text(media.title),
+      child: Text(loan.title),
     );
   }
 }
