@@ -20,16 +20,9 @@ abstract class AbstractView extends StatelessWidget {
     final SettingsController settingsController =
         context.watch<SettingsController>();
     final Account? account = settingsController.currentAccount;
-    const TextStyle entryStyle = TextStyle(
+    final ThemeData themeData = Theme.of(context);
+    final TextStyle entryStyle = themeData.textTheme.titleMedium!.copyWith(
       fontWeight: FontWeight.bold,
-      color: Color(
-        0xff000000,
-      ),
-    );
-    final TextStyle accountStyle = entryStyle.copyWith(
-      color: const Color(
-        0xffffffff,
-      ),
     );
     const double iconSize = 40.0;
     final formatter = intl.DateFormat('dd / MM / yyyy');
@@ -50,11 +43,11 @@ abstract class AbstractView extends StatelessWidget {
             ),
             accountName: Text(
               account?.displayName ?? '',
-              style: accountStyle,
+              style: entryStyle,
             ),
             accountEmail: Text(
               account?.login ?? '',
-              style: accountStyle,
+              style: entryStyle,
             ),
             currentAccountPicture: AnimatedContainer(
               duration: const Duration(
