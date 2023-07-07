@@ -61,13 +61,26 @@ class LoanListView extends AbstractView {
       itemCount: appState.session!.loans!.length,
       itemBuilder: (BuildContext context, int index) {
         final loan = appState.session!.loans![index];
+        TextStyle? style;
+
+        if (loan.isLate()) {
+          style = const TextStyle(
+            color: AbstractView.lateColor,
+            fontWeight: FontWeight.bold,
+          );
+        }
 
         return ListTile(
-          title: Text(loan.title),
           leading: Image.asset(
             'assets/images/${loan.kind}.png',
-            width: 38,
-            height: 38,
+          ),
+          title: Text(
+            loan.title.replaceFirst(' - ', '\n'),
+            style: style,
+          ),
+          subtitle: Text(
+            loan.formattedReturnDate(),
+            textAlign: TextAlign.right,
           ),
           onTap: () {
             // Navigate to the details page. If the user leaves and returns to
