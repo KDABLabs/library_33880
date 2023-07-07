@@ -8,6 +8,8 @@ import '../constants.dart';
 import '../settings/settings_controller.dart';
 
 abstract class AbstractView extends StatelessWidget {
+  static const Color lateColor = Color(0xFFFF0000);
+
   const AbstractView({super.key});
 
   Drawer? buildDrawer(BuildContext context) {
