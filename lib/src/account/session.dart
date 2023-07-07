@@ -62,8 +62,8 @@ class Session {
     return Uri.https(apiHost(), 'cassioweb/index.php/account');
   }
 
-  Future<http.Response> logIn() {
-    return http.post(
+  Future<bool> logIn() async {
+    final response = await http.post(
       loginUri(),
       headers: {
         'cookie': cookiesAsString(),
@@ -74,86 +74,101 @@ class Session {
         'submit': 'valider',
       },
     );
+
+    if (response.statusCode != 302) {
+      debugPrint('LogIn: Can not log in');
+      return false;
+    }
+
+    if (!response.headers.containsKey('set-cookie')) {
+      debugPrint('LogIn: Session did not changed');
+      return true;
+    }
+
+    final session = Cookie.fromSetCookieValue(response.headers['set-cookie']!);
+
+    if (session.name.isNotEmpty) {
+      cookies[session.name] = session.value;
+
+      debugPrint('LogIn: Session updated');
+      return true;
+    }
+
+    debugPrint('LogIn: Can\'t update session');
+    return false;
   }
 
-  Future<http.Response> logOut() {
-    return http.get(
-      loginUri(),
+  Future<bool> logOut() async {
+    final response = await http.get(
+      logoutUri(),
       headers: {
-        'Cookies': cookiesAsString(),
+        'cookie': cookiesAsString(),
       },
     );
+
+    if (response.statusCode != 302) {
+      debugPrint('LogOut: Can not log out');
+      return false;
+    }
+
+    cookies.remove('session');
+    information = null;
+    reservations = null;
+    loans = null;
+
+    debugPrint('LogOut: Session updated');
+    return true;
   }
 
-  Future<http.Response> extend() {
-    return http.get(
+  Future<bool> extend() async {
+    final response = await http.get(
       extendUri(),
       headers: {
         'cookie': cookiesAsString(),
       },
     );
+
+    if (response.statusCode == 302) {
+      debugPrint('Extend: Loans extended');
+      return true;
+    }
+
+    debugPrint('Extend: Can not extend loans');
+    return false;
   }
 
-  Future<http.Response> status() {
-    return http.get(
+  Future<bool> sync() async {
+    final response = await http.get(
       accountUri(),
       headers: {
         'cookie': cookiesAsString(),
       },
     );
-  }
 
-  Future<bool> getData() async {
-    // var data = await status();
+    if (response.statusCode == 200) {
+      debugPrint('Sync: Got account status');
 
-    // if (data.statusCode == 200) {
-    //   print('Get data from session');
-    //   print(data.statusCode);
-    //   print(data.reasonPhrase);
-    //   print(data.headers);
-    //   print(data.request);
-    //   print(data.request?.contentLength);
-    //   print(data.body);
-    //   return data;
-    // }
+      final document = html.parse(response.body);
 
-    var login = await logIn();
+      if (!document.hasContent()) {
+        debugPrint('Sync: Invalid document to parse');
+        return false;
+      }
 
-    if (login.statusCode != 302) {
-      debugPrint('Can not log in');
+      information = Information.parse(document);
+      reservations = Reservation.parse(document, useFakeItems);
+      loans = Loan.parse(document, useFakeItems);
+
+      if (information != null && reservations != null && loans != null) {
+        debugPrint('Sync: Account synced');
+        return true;
+      }
+
+      debugPrint('Sync: Account sync failed');
       return false;
     }
 
-    final session = Cookie.fromSetCookieValue(login.headers['set-cookie']!);
-
-    if (session.name.isNotEmpty) {
-      cookies[session.name] = session.value;
-
-      debugPrint('Updated session');
-
-      var data = await status();
-
-      if (data.statusCode == 200) {
-        debugPrint('Got status from account');
-
-        final document = html.parse(data.body);
-
-        if (!document.hasContent()) {
-          debugPrint('Session::getData: Invalid document to parse');
-          return false;
-        }
-
-        information = Information.parse(document);
-        reservations = Reservation.parse(document, useFakeItems);
-        loans = Loan.parse(document, useFakeItems);
-
-        return information != null && reservations != null && loans != null;
-      } else {
-        debugPrint('Can not get account status');
-      }
-    }
-
-    debugPrint('Can\'t get session');
+    debugPrint('Sync: Can not get account status');
     return false;
   }
 }

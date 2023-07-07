@@ -29,13 +29,29 @@ class AppState extends ChangeNotifier {
 
     if (account != null) {
       _session = Session(account);
-      _session!.getData().then(
-            (value) => notifyListeners(),
-          );
+      sync();
     } else {
       _session = null;
     }
 
     notifyListeners();
+  }
+
+  void sync() {
+    if (_session != null) {
+      _session!.logIn().then(
+        (ok) {
+          if (ok) {
+            session!.sync().then(
+              (ok) {
+                notifyListeners();
+              },
+            );
+          } else {
+            notifyListeners();
+          }
+        },
+      );
+    }
   }
 }
