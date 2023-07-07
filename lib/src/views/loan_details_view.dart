@@ -9,7 +9,7 @@ import '../constants.dart';
 /// Displays detailed information about a Loan.
 class LoanDetailsView extends AbstractView {
   final String title;
-  
+
   const LoanDetailsView(this.title, {super.key});
 
   @override
@@ -45,9 +45,57 @@ class LoanDetailsView extends AbstractView {
           orElse: () => notFoundLoan,
         ) ??
         notFoundLoan;
+    TextStyle style = const TextStyle(
+      fontWeight: FontWeight.bold,
+    );
 
-    return Center(
-      child: Text(loan.title),
+    if (loan.isLate()) {
+      style = style.copyWith(
+        color: AbstractView.lateColor,
+      );
+    }
+
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Center(
+        child: Column(
+          children: [
+            Image.asset(
+              'assets/images/${loan.kind}.png',
+            ),
+            Text(
+              loan.title.replaceFirst(' - ', '\n'),
+              style: style,
+              textAlign: TextAlign.center,
+            ),
+            const Divider(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Loan Date:',
+                ),
+                Text(
+                  loan.formattedLoanDate(),
+                  textAlign: TextAlign.right,
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Return Date:',
+                ),
+                Text(
+                  loan.formattedReturnDate(),
+                  textAlign: TextAlign.right,
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
