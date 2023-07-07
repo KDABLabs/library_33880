@@ -1,4 +1,3 @@
-import 'package:intl/intl.dart' as intl;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -25,7 +24,6 @@ abstract class AbstractView extends StatelessWidget {
       fontWeight: FontWeight.bold,
     );
     const double iconSize = 40.0;
-    final formatter = intl.DateFormat('dd / MM / yyyy');
     final information = appState.session?.information ?? Information.empty();
 
     return Drawer(
@@ -178,7 +176,7 @@ abstract class AbstractView extends StatelessWidget {
                     Icons.app_registration,
                   ),
                   title: Text(
-                    formatter.format(information.registrationDateTime),
+                    information.formattedRegistrationDate(),
                   ),
                   titleTextStyle: entryStyle,
                 ),
@@ -187,7 +185,7 @@ abstract class AbstractView extends StatelessWidget {
                     Icons.date_range,
                   ),
                   title: Text(
-                    formatter.format(information.renewDateTime),
+                    information.formattedRenewDate(),
                   ),
                   titleTextStyle: entryStyle,
                 ),
