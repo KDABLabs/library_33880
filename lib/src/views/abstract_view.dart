@@ -13,7 +13,9 @@ abstract class AbstractView extends StatelessWidget {
   const AbstractView({super.key});
 
   Drawer? buildDrawer(BuildContext context) {
-    if (ModalRoute.of(context)?.settings.name != ConstantsRoutes.root) {
+    final route = ModalRoute.of(context)?.settings.name ?? '';
+
+    if (route.endsWith('details') || route.endsWith('settings')) {
       return null;
     }
 
