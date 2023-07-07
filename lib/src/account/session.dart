@@ -54,6 +54,10 @@ class Session {
     return Uri.https(apiHost(), 'cassioweb/account/logout');
   }
 
+  Uri extendUri() {
+    return Uri.https(apiHost(), 'cassioweb/account/extend');
+  }
+
   Uri accountUri() {
     return Uri.https(apiHost(), 'cassioweb/index.php/account');
   }
@@ -77,6 +81,15 @@ class Session {
       loginUri(),
       headers: {
         'Cookies': cookiesAsString(),
+      },
+    );
+  }
+
+  Future<http.Response> extend() {
+    return http.get(
+      extendUri(),
+      headers: {
+        'cookie': cookiesAsString(),
       },
     );
   }
