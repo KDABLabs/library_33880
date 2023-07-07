@@ -24,6 +24,14 @@ class Information {
     this.email,
   );
 
+  String formattedRegistrationDate() {
+    return formatter.format(registrationDateTime);
+  }
+
+  String formattedRenewDate() {
+    return formatter.format(renewDateTime);
+  }
+
   Map<String, dynamic> toJson() {
     return {
       'cardNumber': cardNumber,

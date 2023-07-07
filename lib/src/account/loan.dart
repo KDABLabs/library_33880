@@ -20,6 +20,14 @@ class Loan {
     return DateTime.now().isAfter(returnDateTime);
   }
 
+  String formattedReturnDate() {
+    return formatter.format(returnDateTime);
+  }
+
+  String formattedLoanDate() {
+    return formatter.format(loanDateTime);
+  }
+
   Map<String, dynamic> toJson() {
     return {
       'kind': kind,
