@@ -16,8 +16,10 @@ class Session {
   List<Loan>? loans;
   static const bool useFakeItems = false; //kDebugMode;
 
-  Session(this.account, {Map<String, String>? cookies})
-      : cookies = cookies ??
+  Session(
+    this.account, {
+    Map<String, String>? cookies,
+  }) : cookies = cookies ??
             {
               'cookielawinfo-checkbox-necessary': 'yes',
               'cookielawinfo-checkbox-non-necessary': 'no',

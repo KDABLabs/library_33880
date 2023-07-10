@@ -10,7 +10,10 @@ import '../constants.dart';
 class LoanDetailsView extends AbstractView {
   final String title;
 
-  const LoanDetailsView(this.title, {super.key});
+  const LoanDetailsView(
+    this.title, {
+    super.key,
+  });
 
   @override
   AppBar buildAppBar(BuildContext context) {

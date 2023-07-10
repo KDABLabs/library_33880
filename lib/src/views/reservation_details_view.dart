@@ -10,7 +10,10 @@ import '../constants.dart';
 class ReservationDetailsView extends AbstractView {
   final String title;
   
-  const ReservationDetailsView(this.title, {super.key});
+  const ReservationDetailsView(
+    this.title, {
+    super.key,
+  });
 
   @override
   AppBar buildAppBar(BuildContext context) {

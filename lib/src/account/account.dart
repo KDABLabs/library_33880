@@ -6,7 +6,12 @@ class Account {
   final String password;
   final Color color;
   
-  const Account(this.displayName, this.login, this.password, this.color);
+  const Account(
+    this.displayName,
+    this.login,
+    this.password,
+    this.color,
+  );
 }
 
 typedef Accounts = List<Account>;

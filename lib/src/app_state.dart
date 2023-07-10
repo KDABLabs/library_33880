@@ -7,7 +7,9 @@ class AppState extends ChangeNotifier {
   bool _expandAccounts = false;
   Session? _session;
 
-  AppState({Account? account}) {
+  AppState({
+    Account? account,
+  }) {
     setCurrentAccount(account);
   }
 
