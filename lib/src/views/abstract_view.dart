@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -236,10 +237,25 @@ abstract class AbstractView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appState = context.read<AppState>();
+
     return Scaffold(
-      drawer: buildDrawer(context),
-      appBar: buildAppBar(context),
-      body: buildBody(context),
-    );
+        drawer: buildDrawer(context),
+        appBar: buildAppBar(context),
+        body: RefreshIndicator(
+          child: ScrollConfiguration(
+            behavior: ScrollConfiguration.of(context).copyWith(
+              dragDevices: {
+                PointerDeviceKind.touch,
+                PointerDeviceKind.mouse,
+              },
+            ),
+            child: buildBody(context),
+          ),
+          onRefresh: () async {
+            debugPrint('Refreshing...');
+            appState.sync();
+          },
+        ));
   }
 }
