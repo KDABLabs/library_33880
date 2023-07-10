@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'abstract_view.dart';
+import 'informative_empty_view.dart';
 import '../app_state.dart';
 import '../constants.dart';
 
@@ -38,13 +39,9 @@ class LoanListView extends AbstractView {
     final session = appState.session;
 
     if (session == null || session.loans == null) {
-      return const Center(
-        child: Text('No valid session yet...'),
-      );
+      return InformativeEmptyView('No valid session yet...');
     } else if (session.loans!.isEmpty) {
-      return const Center(
-        child: Text('There is no loan in your library'),
-      );
+      return InformativeEmptyView('There is no loan in your library');
     }
 
     // To work with lists that may contain a large number of items, it’s best
