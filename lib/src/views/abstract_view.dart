@@ -8,12 +8,8 @@ import '../app_state.dart';
 import '../constants.dart';
 import '../settings/settings_controller.dart';
 
-abstract class AbstractView extends StatelessWidget {
+abstract mixin class AbstractView {
   static const Color lateColor = Color(0xFFFF0000);
-
-  const AbstractView({
-    super.key,
-  });
 
   Drawer? buildDrawer(BuildContext context) {
     final route = ModalRoute.of(context)?.settings.name ?? '';
@@ -235,7 +231,6 @@ abstract class AbstractView extends StatelessWidget {
 
   Widget buildBody(BuildContext context);
 
-  @override
   Widget build(BuildContext context) {
     final appState = context.read<AppState>();
 
@@ -258,4 +253,12 @@ abstract class AbstractView extends StatelessWidget {
           },
         ));
   }
+}
+
+abstract class StatelessAbstractView extends StatelessWidget with AbstractView {
+  const StatelessAbstractView({super.key});
+}
+
+abstract class StatefulAbstractView extends StatefulWidget with AbstractView {
+  const StatefulAbstractView({super.key});
 }

@@ -7,7 +7,7 @@ import '../app_state.dart';
 import '../constants.dart';
 
 /// Displays a list of Reservation.
-class ReservationListView extends AbstractView {
+class ReservationListView extends StatelessAbstractView {
   const ReservationListView({
     super.key,
   });

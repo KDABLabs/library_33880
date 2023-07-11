@@ -7,7 +7,7 @@ import '../app_state.dart';
 import '../constants.dart';
 
 /// Displays a list of Loan.
-class LoanListView extends AbstractView {
+class LoanListView extends StatelessAbstractView {
   const LoanListView({
     super.key,
   });

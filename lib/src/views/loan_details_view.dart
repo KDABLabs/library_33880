@@ -7,7 +7,7 @@ import '../app_state.dart';
 import '../constants.dart';
 
 /// Displays detailed information about a Loan.
-class LoanDetailsView extends AbstractView {
+class LoanDetailsView extends StatelessAbstractView {
   final String title;
 
   const LoanDetailsView(

@@ -7,7 +7,7 @@ import '../app_state.dart';
 import '../constants.dart';
 
 /// Displays detailed information about a Reservation.
-class ReservationDetailsView extends AbstractView {
+class ReservationDetailsView extends StatelessAbstractView {
   final String title;
   
   const ReservationDetailsView(
