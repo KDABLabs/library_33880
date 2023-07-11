@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'app_state.dart';
 import 'constants.dart';
 import 'settings/settings_controller.dart';
+import 'views/add_account_view.dart';
 import 'views/loan_details_view.dart';
 import 'views/loan_list_view.dart';
 import 'views/reservation_details_view.dart';
@@ -83,6 +84,8 @@ class MyApp extends StatelessWidget {
                 settings: routeSettings,
                 builder: (BuildContext context) {
                   switch (routeSettings.name) {
+                    case ConstantsRoutes.register:
+                      return const AddAccountView();
                     case ConstantsRoutes.settings:
                       return const SettingsView();
                     case ConstantsRoutes.reservationDetails:
