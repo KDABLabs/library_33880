@@ -19,6 +19,11 @@ class SettingsService {
 
   Future<Accounts> accounts() async => Accounts.empty();
 
-  Future<void> updateAccounts(Accounts accounts) async {
+  Future<void> updateAccounts(Accounts accounts) async {}
+
+  Future<int> currentAccountIndex() async => -1;
+
+  Future<void> updateCurrentAccountIndex(int currentAccountIndex) async {
+    //
   }
 }

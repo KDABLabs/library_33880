@@ -17,13 +17,17 @@ class SettingsController with ChangeNotifier {
   // Make ThemeMode a private variable so it is not updated directly without
   // also persisting the changes with the SettingsService.
   late ThemeMode _themeMode;
+  late Accounts _accounts;
+  late int _currentAccountIndex;
 
   // Allow Widgets to read the user's preferred ThemeMode.
   ThemeMode get themeMode => _themeMode;
-
-  late Accounts _accounts;
-
   Accounts get accounts => _accounts;
+  int get currentAccountIndex => _currentAccountIndex;
+  Account? get currentAccount =>
+      currentAccountIndex < 0 || currentAccountIndex >= accounts.length
+          ? null
+          : accounts[currentAccountIndex];
 
   /// Load the user's settings from the SettingsService. It may load from a
   /// local database or the internet. The controller only knows it can load the
@@ -31,6 +35,7 @@ class SettingsController with ChangeNotifier {
   Future<void> loadSettings() async {
     _themeMode = await _settingsService.themeMode();
     _accounts = await _settingsService.accounts();
+    _currentAccountIndex = await _settingsService.currentAccountIndex();
 
     // Important! Inform listeners a change has occurred.
     notifyListeners();
@@ -64,5 +69,18 @@ class SettingsController with ChangeNotifier {
     notifyListeners();
 
     await _settingsService.updateAccounts(newAccounts);
+  }
+
+  Future<void> updateCurrentAccountIndex(int newCurrentAccountIndex) async {
+    if (newCurrentAccountIndex < -1 ||
+        newCurrentAccountIndex >= accounts.length) return;
+
+    if (newCurrentAccountIndex == _currentAccountIndex) return;
+
+    _currentAccountIndex = newCurrentAccountIndex;
+
+    notifyListeners();
+
+    await _settingsService.updateCurrentAccountIndex(newCurrentAccountIndex);
   }
 }
