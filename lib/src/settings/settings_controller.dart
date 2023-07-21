@@ -88,4 +88,25 @@ class SettingsController with ChangeNotifier {
 
     await _settingsService.updateCurrentAccountIndex(newCurrentAccountIndex);
   }
+
+  Future<void> moveAccount(int oldIndex, int newIndex) async {
+    RangeError.checkValidIndex(oldIndex, accounts, "from", accounts.length);
+    RangeError.checkValidIndex(newIndex, accounts, "to", accounts.length + 1);
+
+    Accounts newAccounts = Accounts.from(accounts);
+    Account account = newAccounts.removeAt(oldIndex);
+    final currentLogin = currentAccount?.login ?? '';
+
+    if (newIndex > oldIndex) {
+      newAccounts.insert(newIndex - 1, account);
+    } else {
+      newAccounts.insert(newIndex, account);
+    }
+
+    final int currentIndex =
+        newAccounts.indexWhere((element) => element.login == currentLogin);
+
+    await updateAccounts(newAccounts);
+    return updateCurrentAccountIndex(currentIndex);
+  }
 }
