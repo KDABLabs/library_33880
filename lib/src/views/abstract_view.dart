@@ -231,6 +231,10 @@ abstract mixin class AbstractView {
 
   Widget buildBody(BuildContext context);
 
+  FloatingActionButton? buildFloatingAction(BuildContext context) {
+    return null;
+  }
+
   Widget build(BuildContext context) {
     final appState = context.read<AppState>();
 
@@ -251,7 +255,9 @@ abstract mixin class AbstractView {
             debugPrint('Refreshing...');
             appState.sync();
           },
-        ));
+      ),
+      floatingActionButton: buildFloatingAction(context),
+    );
   }
 }
 
