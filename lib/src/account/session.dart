@@ -131,11 +131,12 @@ class Session {
     );
 
     if (response.statusCode == 302) {
-      debugPrint('Extend: Loans extended');
+      parseAccountDocument(response.body);
       return true;
     }
 
     debugPrint('Extend: Can not extend loans');
+    parseAccountDocument(response.body);
     return false;
   }
 
@@ -148,29 +149,33 @@ class Session {
     );
 
     if (response.statusCode == 200) {
-      debugPrint('Sync: Got account status');
-
-      final document = html.parse(response.body);
-
-      if (!document.hasContent()) {
-        debugPrint('Sync: Invalid document to parse');
-        return false;
-      }
-
-      information = Information.parse(document);
-      reservations = Reservation.parse(document, useFakeItems);
-      loans = Loan.parse(document, useFakeItems);
-
-      if (information != null && reservations != null && loans != null) {
-        debugPrint('Sync: Account synced');
-        return true;
-      }
-
-      debugPrint('Sync: Account sync failed');
-      return false;
+      return parseAccountDocument(response.body);
     }
 
     debugPrint('Sync: Can not get account status');
+    return false;
+  }
+
+  bool parseAccountDocument(String body) {
+    debugPrint('Account: Got account status');
+
+    final document = html.parse(body);
+
+    if (!document.hasContent()) {
+      debugPrint('Account: Invalid document to parse');
+      return false;
+    }
+
+    information = Information.parse(document);
+    reservations = Reservation.parse(document, useFakeItems);
+    loans = Loan.parse(document, useFakeItems);
+
+    if (information != null && reservations != null && loans != null) {
+      debugPrint('Account: Account synced');
+      return true;
+    }
+
+    debugPrint('Account: Account sync failed');
     return false;
   }
 }

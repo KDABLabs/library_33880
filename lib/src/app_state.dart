@@ -56,4 +56,22 @@ class AppState extends ChangeNotifier {
       );
     }
   }
+
+  void extendLoans() {
+    if (_session != null) {
+      _session!.logIn().then(
+        (ok) {
+          if (ok) {
+            _session!.extend().then(
+              (ok) {
+                notifyListeners();
+              },
+            );
+          } else {
+            notifyListeners();
+          }
+        },
+      );
+    }
+  }
 }

@@ -64,7 +64,7 @@ class Loan {
               </tr>
               <tr>
                   <td style='text-align:center;vertical-align:middle;font-size:small;'>L</td>
-                  <td style='white-space:normal;'>Vie (La). - Larousse <br><span style='color:red; font-size: 12px'></span></td>
+                  <td style='white-space:normal;'>Animal Jack. 2, Montagne magique (La) / Kid Toussaint. - Dupuis, impr. 2019 <br><span style='color:red; font-size: 12px'>CE DOCUMENT A PLUS DE 7 JOURS DE RETARD. LA PROLONGATION EN LIGNE EST IMPOSSIBLE.</span></td>
                   <td style='text-align:center;vertical-align:middle;font-size:small;'>12/07/2023</td>
                   <td style='text-align:center;vertical-align:middle;font-size:small;'>12/06/2023</td>
               </tr>
