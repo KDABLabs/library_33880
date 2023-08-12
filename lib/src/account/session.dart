@@ -57,7 +57,7 @@ class Session {
   }
 
   Uri extendUri() {
-    return Uri.https(apiHost(), 'cassioweb/account/extend');
+    return Uri.https(apiHost(), 'cassioweb/extend');
   }
 
   Uri accountUri() {
