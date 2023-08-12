@@ -93,4 +93,20 @@ class LoanListView extends StatelessAbstractView {
       },
     );
   }
+
+  @override
+  FloatingActionButton? buildFloatingAction(BuildContext context) {
+    final state = context.read<AppState>();
+
+    return FloatingActionButton(
+      onPressed: () {
+        state.extendLoans();
+      },
+      tooltip: 'Extend loans',
+      child: const Icon(
+        Icons.lock_reset,
+        size: 40,
+      ),
+    );
+  }
 }
