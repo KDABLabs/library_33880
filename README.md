@@ -28,3 +28,8 @@ the `lib/src/localization` directory.
 To support additional languages, please visit the tutorial on
 [Internationalizing Flutter
 apps](https://flutter.dev/docs/development/accessibility-and-localization/internationalization)
+
+## TODO
+
+- Allow to remove accounts from settings view
+- Report http erros to passive notification
