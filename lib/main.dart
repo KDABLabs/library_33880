@@ -6,6 +6,9 @@ import 'src/settings/settings_controller.dart';
 import 'src/settings/settings_service.dart';
 
 void main() async {
+  // This is needed on Android
+  WidgetsFlutterBinding.ensureInitialized();
+
   // Set up the SettingsController, which will glue user settings to multiple
   // Flutter Widgets.
   final settingsController = SettingsController(SettingsService());
