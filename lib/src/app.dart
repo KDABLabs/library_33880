@@ -96,8 +96,18 @@ class MyApp extends StatelessWidget {
                     case ConstantsRoutes.loanDetails:
                       return LoanDetailsView(routeSettings.arguments as String);
                     case ConstantsRoutes.loans:
-                    default:
                       return const LoanListView();
+                    default:
+                      {
+                        final accounts =
+                            context.read<SettingsController>().accounts;
+
+                        if (accounts.isEmpty) {
+                          return const AddAccountView();
+                        }
+
+                        return const LoanListView();
+                      }
                   }
                 },
               );
