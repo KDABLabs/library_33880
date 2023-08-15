@@ -70,6 +70,7 @@ class AddAccountView extends StatefulAbstractView {
             ),
             ColorPicker(
               color: state.color,
+              enableShadesSelection: false,
               onColorChanged: (Color value) {
                 state.color = value;
               },
