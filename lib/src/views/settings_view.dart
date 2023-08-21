@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:library_33880/src/app_state.dart';
 import 'package:provider/provider.dart';
 
 import 'abstract_view.dart';
@@ -75,6 +76,7 @@ class _AccountsListViewState extends State<AccountsListView> {
   @override
   Widget build(BuildContext context) {
     final SettingsController settings = context.read<SettingsController>();
+    final AppState state = context.watch<AppState>();
 
     if (settings.accounts.isEmpty) {
       return InformativeEmptyView('There is no accounts yet');
@@ -90,8 +92,24 @@ class _AccountsListViewState extends State<AccountsListView> {
 
         return ListTile(
           key: Key('$index'),
-          leading: CircleAvatar(
-            backgroundColor: account.color,
+          leading: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CircleAvatar(
+                backgroundColor: account.color,
+                radius: 12,
+              ),
+              IconButton(
+                icon: const Icon(Icons.delete_forever),
+                iconSize: 28,
+                hoverColor: Colors.transparent,
+                tooltip: 'Remove ${account.displayName}',
+                onPressed: () {
+                  settings.removeAccount(index);
+                  state.setCurrentAccount(settings.currentAccount);
+                },
+              ),
+            ],
           ),
           title: Text(
             account.displayName,

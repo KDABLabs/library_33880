@@ -109,4 +109,19 @@ class SettingsController with ChangeNotifier {
     await updateAccounts(newAccounts);
     return updateCurrentAccountIndex(currentIndex);
   }
+
+  Future<void> removeAccount(int index) async {
+    RangeError.checkValidIndex(index, accounts, "from", accounts.length);
+
+    final String currentLogin = currentAccount?.login ?? '';
+    Accounts newAccounts = Accounts.from(accounts);
+
+    newAccounts.removeAt(index);
+
+    final int currentIndex =
+        newAccounts.indexWhere((element) => element.login == currentLogin);
+
+    await updateAccounts(newAccounts);
+    return updateCurrentAccountIndex(currentIndex);
+  }
 }
