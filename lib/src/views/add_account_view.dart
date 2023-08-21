@@ -4,7 +4,6 @@ import 'package:flex_color_picker/flex_color_picker.dart';
 
 import 'abstract_view.dart';
 import '../account/account.dart';
-import '../app_state.dart';
 import '../constants.dart';
 import '../settings/settings_controller.dart';
 
@@ -80,20 +79,14 @@ class AddAccountView extends StatefulAbstractView {
               child: ElevatedButton(
                 onPressed: () {
                   if (state.formKey.currentState!.validate()) {
-                    final appState = context.read<AppState>();
                     final settings = context.read<SettingsController>();
-                    Accounts accounts = Accounts.from(settings.accounts);
 
-                    accounts.add(Account(
+                    settings.addAccount(Account(
                       state.displayNameController.text,
                       state.loginController.text,
                       state.passwordController.text,
                       state.color,
                     ));
-
-                    settings.updateAccounts(accounts);
-                    settings.updateCurrentAccountIndex(accounts.length - 1);
-                    appState.setCurrentAccount(settings.currentAccount);
 
                     Navigator.of(context)
                         .pushNamedAndRemoveUntil('', (Route route) => false);

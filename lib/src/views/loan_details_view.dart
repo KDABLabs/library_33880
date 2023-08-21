@@ -3,8 +3,8 @@ import 'package:provider/provider.dart';
 
 import 'abstract_view.dart';
 import '../account/loan.dart';
-import '../app_state.dart';
 import '../constants.dart';
+import '../settings/settings_controller.dart';
 
 /// Displays detailed information about a Loan.
 class LoanDetailsView extends StatelessAbstractView {
@@ -41,8 +41,8 @@ class LoanDetailsView extends StatelessAbstractView {
       DateTime.now(),
       DateTime.now(),
     );
-    final appState = context.read<AppState>();
-    final loans = appState.session?.loans;
+    final settings = context.read<SettingsController>();
+    final loans = settings.session?.loans;
     final loan = loans?.firstWhere(
           (loan) => loan.title == title,
           orElse: () => notFoundLoan,

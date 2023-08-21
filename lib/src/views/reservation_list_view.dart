@@ -3,8 +3,8 @@ import 'package:provider/provider.dart';
 
 import 'abstract_view.dart';
 import 'informative_empty_view.dart';
-import '../app_state.dart';
 import '../constants.dart';
+import '../settings/settings_controller.dart';
 
 /// Displays a list of Reservation.
 class ReservationListView extends StatelessAbstractView {
@@ -35,8 +35,8 @@ class ReservationListView extends StatelessAbstractView {
 
   @override
   Widget buildBody(BuildContext context) {
-    final appState = context.watch<AppState>();
-    final session = appState.session;
+    final settings = context.watch<SettingsController>();
+    final session = settings.session;
 
     if (session == null || session.reservations == null) {
       return InformativeEmptyView('No valid session yet...');
@@ -55,9 +55,9 @@ class ReservationListView extends StatelessAbstractView {
       // scroll position when a user leaves and returns to the app after it
       // has been killed while running in the background.
       restorationId: 'reservationListView',
-      itemCount: appState.session!.reservations!.length,
+      itemCount: settings.session!.reservations!.length,
       itemBuilder: (BuildContext context, int index) {
-        final reservation = appState.session!.reservations![index];
+        final reservation = settings.session!.reservations![index];
 
         return ListTile(
           title: Text(reservation.title),

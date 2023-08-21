@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:library_33880/src/app_state.dart';
 import 'package:provider/provider.dart';
 
 import 'abstract_view.dart';
@@ -36,7 +35,8 @@ class SettingsView extends StatelessAbstractView {
                 // Read the selected themeMode from the controller
                 value: settings.themeMode,
                 // Call the updateThemeMode method any time the user selects a theme.
-                onChanged: settings.updateThemeMode,
+                onChanged: (ThemeMode? theme) =>
+                    settings.setThemeMode(theme ?? ThemeMode.system),
                 items: const [
                   DropdownMenuItem(
                     value: ThemeMode.system,
@@ -75,8 +75,7 @@ class AccountsListView extends StatefulWidget {
 class _AccountsListViewState extends State<AccountsListView> {
   @override
   Widget build(BuildContext context) {
-    final SettingsController settings = context.read<SettingsController>();
-    final AppState state = context.watch<AppState>();
+    final SettingsController settings = context.watch<SettingsController>();
 
     if (settings.accounts.isEmpty) {
       return InformativeEmptyView('There is no accounts yet');
@@ -106,7 +105,10 @@ class _AccountsListViewState extends State<AccountsListView> {
                 tooltip: 'Remove ${account.displayName}',
                 onPressed: () {
                   settings.removeAccount(index);
-                  state.setCurrentAccount(settings.currentAccount);
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Account removed!')),
+                  );
                 },
               ),
             ],

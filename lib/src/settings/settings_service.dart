@@ -3,11 +3,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../account/account.dart';
 
-/// A service that stores and retrieves user settings.
-///
-/// By default, this class does not persist user settings. If you'd like to
-/// persist the user settings locally, use the shared_preferences package. If
-/// you'd like to store settings on a web server, use the http package.
 class SettingsService {
   Future<ThemeMode> themeMode() async {
     final prefs = await SharedPreferences.getInstance();
@@ -15,7 +10,7 @@ class SettingsService {
     return theme != null ? ThemeMode.values[theme] : ThemeMode.system;
   }
 
-  Future<void> updateThemeMode(ThemeMode theme) async {
+  Future<void> setThemeMode(ThemeMode theme) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setInt('theme', theme.index);
   }
@@ -52,7 +47,7 @@ class SettingsService {
     return accounts;
   }
 
-  Future<void> updateAccounts(Accounts accounts) async {
+  Future<void> setAccounts(Accounts accounts) async {
     final prefs = await SharedPreferences.getInstance();
 
     prefs.remove('accounts');
@@ -75,7 +70,7 @@ class SettingsService {
     return index ?? -1;
   }
 
-  Future<void> updateCurrentAccountIndex(int currentAccountIndex) async {
+  Future<void> setCurrentAccountIndex(int currentAccountIndex) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setInt('currentAccountIndex', currentAccountIndex);
   }

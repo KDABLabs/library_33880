@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 
 import '../account/account.dart';
 import '../account/information.dart';
-import '../app_state.dart';
 import '../constants.dart';
 import '../settings/settings_controller.dart';
 
@@ -18,16 +17,14 @@ abstract mixin class AbstractView {
       return null;
     }
 
-    final AppState appState = context.watch<AppState>();
-    final SettingsController settingsController =
-        context.watch<SettingsController>();
-    final Account? account = settingsController.currentAccount;
+    final SettingsController settings = context.watch<SettingsController>();
+    final Account? account = settings.currentAccount;
     final ThemeData themeData = Theme.of(context);
     final TextStyle entryStyle = themeData.textTheme.titleMedium!.copyWith(
       fontWeight: FontWeight.bold,
     );
     const double iconSize = 40.0;
-    final information = appState.session?.information ?? Information.empty();
+    final information = settings.session?.information ?? Information.empty();
 
     return Drawer(
       child: ListView(
@@ -66,10 +63,10 @@ abstract mixin class AbstractView {
               0xff000000,
             ),
             onDetailsPressed: () {
-              appState.setAccountsExpanded(!appState.expandAccounts);
+              settings.setAccountExpanded(!settings.accountExpanded);
             },
             otherAccountsPictures: [
-              ...settingsController.accounts.asMap().entries.map((entry) {
+              ...settings.accounts.asMap().entries.map((entry) {
                 return Tooltip(
                   message: entry.value.displayName,
                   child: IconButton(
@@ -79,9 +76,7 @@ abstract mixin class AbstractView {
                     iconSize: iconSize,
                     color: entry.value.color,
                     onPressed: () {
-                      settingsController.updateCurrentAccountIndex(entry.key);
-                      appState
-                          .setCurrentAccount(settingsController.currentAccount);
+                      settings.setCurrentAccountIndex(entry.key);
                     },
                   ),
                 );
@@ -89,10 +84,10 @@ abstract mixin class AbstractView {
             ],
           ),
           Visibility(
-            visible: appState.expandAccounts,
+            visible: settings.accountExpanded,
             child: Column(
               children: [
-                ...settingsController.accounts.asMap().entries.map((entry) {
+                ...settings.accounts.asMap().entries.map((entry) {
                   return ListTile(
                     leading: Icon(
                       Icons.account_circle,
@@ -104,9 +99,7 @@ abstract mixin class AbstractView {
                     ),
                     titleTextStyle: entryStyle,
                     onTap: () {
-                      settingsController.updateCurrentAccountIndex(entry.key);
-                      appState
-                          .setCurrentAccount(settingsController.currentAccount);
+                      settings.setCurrentAccountIndex(entry.key);
                     },
                   );
                 }).toList(),
@@ -160,8 +153,8 @@ abstract mixin class AbstractView {
             },
           ),
           Visibility(
-            visible: !appState.expandAccounts &&
-                appState.session?.information != null,
+            visible: !settings.accountExpanded &&
+                settings.session?.information != null,
             child: Column(
               children: [
                 const Divider(),
@@ -236,25 +229,25 @@ abstract mixin class AbstractView {
   }
 
   Widget build(BuildContext context) {
-    final appState = context.read<AppState>();
+    final settings = context.read<SettingsController>();
 
     return Scaffold(
-        drawer: buildDrawer(context),
-        appBar: buildAppBar(context),
-        body: RefreshIndicator(
-          child: ScrollConfiguration(
-            behavior: ScrollConfiguration.of(context).copyWith(
-              dragDevices: {
-                PointerDeviceKind.touch,
-                PointerDeviceKind.mouse,
-              },
-            ),
-            child: buildBody(context),
+      drawer: buildDrawer(context),
+      appBar: buildAppBar(context),
+      body: RefreshIndicator(
+        child: ScrollConfiguration(
+          behavior: ScrollConfiguration.of(context).copyWith(
+            dragDevices: {
+              PointerDeviceKind.touch,
+              PointerDeviceKind.mouse,
+            },
           ),
-          onRefresh: () async {
-            debugPrint('Refreshing...');
-            appState.sync();
-          },
+          child: buildBody(context),
+        ),
+        onRefresh: () async {
+          debugPrint('Refreshing...');
+          settings.sync();
+        },
       ),
       floatingActionButton: buildFloatingAction(context),
     );

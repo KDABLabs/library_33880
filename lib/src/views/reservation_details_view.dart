@@ -3,13 +3,13 @@ import 'package:provider/provider.dart';
 
 import 'abstract_view.dart';
 import '../account/reservation.dart';
-import '../app_state.dart';
 import '../constants.dart';
+import '../settings/settings_controller.dart';
 
 /// Displays detailed information about a Reservation.
 class ReservationDetailsView extends StatelessAbstractView {
   final String title;
-  
+
   const ReservationDetailsView(
     this.title, {
     super.key,
@@ -39,8 +39,8 @@ class ReservationDetailsView extends StatelessAbstractView {
       'L',
       'The reservation "$title" can no longer be found.',
     );
-    final appState = context.read<AppState>();
-    final reservations = appState.session?.reservations;
+    final settings = context.read<SettingsController>();
+    final reservations = settings.session?.reservations;
     final loan = reservations?.firstWhere(
           (reservation) => reservation.title == title,
           orElse: () => notFoundReservation,

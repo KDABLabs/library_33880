@@ -2,16 +2,14 @@ import 'package:flutter/material.dart';
 
 import 'settings_service.dart';
 import '../account/account.dart';
+import '../account/session.dart';
 
-/// A class that many Widgets can interact with to read user settings, update
-/// user settings, or listen to user settings changes.
-///
-/// Controllers glue Data Services to Flutter Widgets. The SettingsController
-/// uses the SettingsService to store and retrieve user settings.
 class SettingsController with ChangeNotifier {
   SettingsController(
     this._settingsService,
   );
+
+  // Internals
 
   // Make SettingsService a private variable so it is not used directly.
   final SettingsService _settingsService;
@@ -22,80 +20,118 @@ class SettingsController with ChangeNotifier {
   late Accounts _accounts;
   late int _currentAccountIndex;
 
-  // Allow Widgets to read the user's preferred ThemeMode.
-  ThemeMode get themeMode => _themeMode;
-  Accounts get accounts => _accounts;
-  int get currentAccountIndex => _currentAccountIndex;
-  Account? get currentAccount =>
-      currentAccountIndex < 0 || currentAccountIndex >= accounts.length
-          ? null
-          : accounts[currentAccountIndex];
+  // Not persisted in settings
+  bool _accountExpanded = false;
+  Session? _session;
 
-  Account? accountAt(int index) =>
-      index < 0 || index >= accounts.length ? null : accounts[index];
+  // Helpers
 
-  /// Load the user's settings from the SettingsService. It may load from a
-  /// local database or the internet. The controller only knows it can load the
-  /// settings from the service.
+  // Retrieve all settings
   Future<void> loadSettings() async {
     _themeMode = await _settingsService.themeMode();
     _accounts = await _settingsService.accounts();
     _currentAccountIndex = await _settingsService.currentAccountIndex();
 
-    // Important! Inform listeners a change has occurred.
-    notifyListeners();
+    _setCurrentAccount(currentAccount);
   }
 
-  /// Update and persist the ThemeMode based on the user's selection.
-  Future<void> updateThemeMode(ThemeMode? newThemeMode) async {
-    if (newThemeMode == null) return;
-
-    // Do not perform any work if new and old ThemeMode are identical
-    if (newThemeMode == _themeMode) return;
-
-    // Otherwise, store the new ThemeMode in memory
-    _themeMode = newThemeMode;
-
-    // Important! Inform listeners a change has occurred.
-    notifyListeners();
-
-    // Persist the changes to a local database or the internet using the
-    // SettingService.
-    await _settingsService.updateThemeMode(newThemeMode);
+  void sync() {
+    if (_session != null) {
+      _session!.logIn().then(
+        (ok) {
+          if (ok) {
+            session!.sync().then(
+              (ok) {
+                notifyListeners();
+              },
+            );
+          } else {
+            notifyListeners();
+          }
+        },
+      );
+    }
   }
 
-  Future<void> updateAccounts(Accounts? newAccounts) async {
-    if (newAccounts == null) return;
-
-    if (newAccounts == _accounts) return;
-
-    _accounts = newAccounts;
-
-    notifyListeners();
-
-    await _settingsService.updateAccounts(newAccounts);
+  void extendLoans() {
+    if (_session != null) {
+      _session!.logIn().then(
+        (ok) {
+          if (ok) {
+            _session!.extend().then(
+              (ok) {
+                notifyListeners();
+              },
+            );
+          } else {
+            notifyListeners();
+          }
+        },
+      );
+    }
   }
 
-  Future<void> updateCurrentAccountIndex(int newCurrentAccountIndex) async {
-    if (newCurrentAccountIndex < -1 ||
-        newCurrentAccountIndex >= accounts.length) return;
+  // Properties
 
-    if (newCurrentAccountIndex == _currentAccountIndex) return;
+  ThemeMode get themeMode => _themeMode;
 
-    _currentAccountIndex = newCurrentAccountIndex;
+  Future<void> setThemeMode(ThemeMode theme) async {
+    if (theme != _themeMode) {
+      _themeMode = theme;
 
-    notifyListeners();
+      notifyListeners();
 
-    await _settingsService.updateCurrentAccountIndex(newCurrentAccountIndex);
+      await _settingsService.setThemeMode(theme);
+    }
   }
+
+  Accounts get accounts => _accounts;
+
+  Future<void> setAccounts(Accounts accounts) async {
+    if (accounts != _accounts) {
+      final String currentLogin = currentAccount?.login ?? '';
+
+      _setAccountsAndCurrentAccount(accounts, currentLogin);
+    }
+  }
+
+  int get currentAccountIndex => _currentAccountIndex;
+
+  Future<void> setCurrentAccountIndex(int index) async {
+    if (index >= -1 &&
+        index < _accounts.length &&
+        index != _currentAccountIndex) {
+      _currentAccountIndex = index;
+
+      _setCurrentAccount(currentAccount);
+
+      await _settingsService.setCurrentAccountIndex(index);
+    } else if (index != _currentAccountIndex) {
+      debugPrint('Trying to set unexpected current account index: $index');
+    }
+  }
+
+  Account? accountAt(int index) {
+    if (index < 0 || index >= accounts.length) {
+      if (index != -1) {
+        debugPrint('Getting unexpected account index: $index');
+      }
+
+      return null;
+    }
+
+    return accounts[index];
+  }
+
+  Account? get currentAccount => accountAt(currentAccountIndex);
 
   Future<void> moveAccount(int oldIndex, int newIndex) async {
     RangeError.checkValidIndex(oldIndex, accounts, "from", accounts.length);
     RangeError.checkValidIndex(newIndex, accounts, "to", accounts.length + 1);
 
+    final String currentLogin = currentAccount?.login ?? '';
     Accounts newAccounts = Accounts.from(accounts);
     Account account = newAccounts.removeAt(oldIndex);
-    final currentLogin = currentAccount?.login ?? '';
 
     if (newIndex > oldIndex) {
       newAccounts.insert(newIndex - 1, account);
@@ -103,11 +139,15 @@ class SettingsController with ChangeNotifier {
       newAccounts.insert(newIndex, account);
     }
 
-    final int currentIndex =
-        newAccounts.indexWhere((element) => element.login == currentLogin);
+    _setAccountsAndCurrentAccount(newAccounts, currentLogin);
+  }
 
-    await updateAccounts(newAccounts);
-    return updateCurrentAccountIndex(currentIndex);
+  Future<void> addAccount(Account account) async {
+    Accounts newAccounts = Accounts.from(accounts);
+
+    newAccounts.add(account);
+
+    _setAccountsAndCurrentAccount(newAccounts, account.login);
   }
 
   Future<void> removeAccount(int index) async {
@@ -118,10 +158,52 @@ class SettingsController with ChangeNotifier {
 
     newAccounts.removeAt(index);
 
-    final int currentIndex =
-        newAccounts.indexWhere((element) => element.login == currentLogin);
+    _setAccountsAndCurrentAccount(newAccounts, currentLogin);
+  }
 
-    await updateAccounts(newAccounts);
-    return updateCurrentAccountIndex(currentIndex);
+  bool get accountExpanded => _accountExpanded;
+
+  void setAccountExpanded(bool expanded) {
+    if (_accountExpanded != expanded) {
+      _accountExpanded = expanded;
+
+      notifyListeners();
+    }
+  }
+
+  Session? get session => _session;
+
+  void _setCurrentAccount(Account? account) async {
+    _accountExpanded = false;
+
+    if (account != null) {
+      if (_session?.account != account) {
+        debugPrint(
+            'Switching to ${account.displayName} from ${_session?.account.displayName}');
+        _session = Session(account);
+        sync();
+      } else {
+        notifyListeners();
+      }
+    } else {
+      _session = null;
+      notifyListeners();
+    }
+  }
+
+  void _setAccountsAndCurrentAccount(Accounts accounts, String login) async {
+    int index = accounts.indexWhere((element) => element.login == login);
+
+    if (index == -1 && accounts.isNotEmpty) {
+      index = 0;
+    }
+
+    _accounts = accounts;
+    _currentAccountIndex = index;
+
+    _setCurrentAccount(currentAccount);
+
+    await _settingsService.setAccounts(accounts);
+    await _settingsService.setCurrentAccountIndex(index);
   }
 }

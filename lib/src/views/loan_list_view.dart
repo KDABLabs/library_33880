@@ -3,8 +3,8 @@ import 'package:provider/provider.dart';
 
 import 'abstract_view.dart';
 import 'informative_empty_view.dart';
-import '../app_state.dart';
 import '../constants.dart';
+import '../settings/settings_controller.dart';
 
 /// Displays a list of Loan.
 class LoanListView extends StatelessAbstractView {
@@ -35,8 +35,8 @@ class LoanListView extends StatelessAbstractView {
 
   @override
   Widget buildBody(BuildContext context) {
-    final appState = context.watch<AppState>();
-    final session = appState.session;
+    final settings = context.watch<SettingsController>();
+    final session = settings.session;
 
     if (session == null || session.loans == null) {
       return InformativeEmptyView('No valid session yet...');
@@ -55,9 +55,9 @@ class LoanListView extends StatelessAbstractView {
       // scroll position when a user leaves and returns to the app after it
       // has been killed while running in the background.
       restorationId: 'loanListView',
-      itemCount: appState.session!.loans!.length,
+      itemCount: settings.session!.loans!.length,
       itemBuilder: (BuildContext context, int index) {
-        final loan = appState.session!.loans![index];
+        final loan = settings.session!.loans![index];
         TextStyle? style;
 
         if (loan.isLate()) {
@@ -96,11 +96,11 @@ class LoanListView extends StatelessAbstractView {
 
   @override
   FloatingActionButton? buildFloatingAction(BuildContext context) {
-    final state = context.read<AppState>();
+    final settings = context.read<SettingsController>();
 
     return FloatingActionButton(
       onPressed: () {
-        state.extendLoans();
+        settings.extendLoans();
       },
       tooltip: 'Extend loans',
       child: const Icon(
