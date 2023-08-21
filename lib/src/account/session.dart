@@ -65,6 +65,8 @@ class Session {
   }
 
   Future<bool> logIn() async {
+    _clear(true);
+
     final response = await http.post(
       loginUri(),
       headers: {
@@ -108,21 +110,20 @@ class Session {
       },
     );
 
+    _clear(true);
+
     if (response.statusCode != 302) {
       debugPrint('LogOut: Can not log out');
       return false;
     }
-
-    cookies.remove('session');
-    information = null;
-    reservations = null;
-    loans = null;
 
     debugPrint('LogOut: Session updated');
     return true;
   }
 
   Future<bool> extend() async {
+    _clear(false);
+
     final response = await http.get(
       extendUri(),
       headers: {
@@ -131,16 +132,18 @@ class Session {
     );
 
     if (response.statusCode == 302) {
-      parseAccountDocument(response.body);
+      _parseAccountDocument(response.body);
       return true;
     }
 
     debugPrint('Extend: Can not extend loans');
-    parseAccountDocument(response.body);
+    _parseAccountDocument(response.body);
     return false;
   }
 
   Future<bool> sync() async {
+    _clear(false);
+
     final response = await http.get(
       accountUri(),
       headers: {
@@ -149,14 +152,24 @@ class Session {
     );
 
     if (response.statusCode == 200) {
-      return parseAccountDocument(response.body);
+      return _parseAccountDocument(response.body);
     }
 
     debugPrint('Sync: Can not get account status');
     return false;
   }
 
-  bool parseAccountDocument(String body) {
+  void _clear(bool session) {
+    if (session) {
+      cookies.remove('session');
+    }
+
+    information = null;
+    reservations = null;
+    loans = null;
+  }
+
+  bool _parseAccountDocument(String body) {
     debugPrint('Account: Got account status');
 
     final document = html.parse(body);
