@@ -58,13 +58,26 @@ class ReservationListView extends StatelessAbstractView {
       itemCount: settings.session!.reservations!.length,
       itemBuilder: (BuildContext context, int index) {
         final reservation = settings.session!.reservations![index];
+        TextStyle? style;
+
+        if (reservation.isLate) {
+          style = const TextStyle(
+            color: AbstractView.lateColor,
+            fontWeight: FontWeight.bold,
+          );
+        }
 
         return ListTile(
-          title: Text(reservation.title),
           leading: Image.asset(
-            'assets/images/${reservation.kind}.png',
-            width: 38,
-            height: 38,
+            'assets/images/R.png',
+          ),
+          title: Text(
+            reservation.formattedTitle,
+            style: style,
+          ),
+          subtitle: Text(
+            reservation.formattedReservationDate,
+            textAlign: TextAlign.right,
           ),
           onTap: () {
             // Navigate to the details page. If the user leaves and returns to

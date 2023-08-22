@@ -18,7 +18,7 @@ class ReservationDetailsView extends StatelessAbstractView {
   @override
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
-      title: const Text('Loan Details'),
+      title: const Text('Reservation Details'),
       actions: [
         IconButton(
           icon: const Icon(Icons.settings),
@@ -36,19 +36,93 @@ class ReservationDetailsView extends StatelessAbstractView {
   @override
   Widget buildBody(BuildContext context) {
     final notFoundReservation = Reservation(
-      'L',
+      DateTime.now(),
       'The reservation "$title" can no longer be found.',
+      'N/A',
+      '-',
     );
     final settings = context.read<SettingsController>();
     final reservations = settings.session?.reservations;
-    final loan = reservations?.firstWhere(
+    final reservation = reservations?.firstWhere(
           (reservation) => reservation.title == title,
           orElse: () => notFoundReservation,
         ) ??
         notFoundReservation;
+    TextStyle style = const TextStyle(
+      fontWeight: FontWeight.bold,
+    );
 
-    return Center(
-      child: Text(loan.title),
+    if (reservation.isLate) {
+      style = style.copyWith(
+        color: AbstractView.lateColor,
+      );
+    }
+
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Center(
+        child: Column(
+          children: [
+            Image.asset(
+              'assets/images/R.png',
+            ),
+            Text(
+              reservation.formattedTitle,
+              style: style,
+              textAlign: TextAlign.center,
+            ),
+            const Divider(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Reservation Date:',
+                ),
+                Text(
+                  reservation.formattedReservationDate,
+                  textAlign: TextAlign.right,
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Expiration Date:',
+                ),
+                Text(
+                  reservation.formattedExpirationDate,
+                  textAlign: TextAlign.right,
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Availability:',
+                ),
+                Text(
+                  reservation.formattedAvailability,
+                  textAlign: TextAlign.right,
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Location:',
+                ),
+                Text(
+                  reservation.location,
+                  textAlign: TextAlign.right,
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

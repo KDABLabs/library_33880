@@ -14,4 +14,8 @@ class Utils {
 
     return title;
   }
+
+  static String beautifyAvailability(String availability) {
+    return availability;
+  }
 }
