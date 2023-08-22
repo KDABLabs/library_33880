@@ -2,6 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:html/dom.dart' as dom;
 
+import '../utils.dart';
+
 class Loan {
   final String kind;
   final String title;
@@ -9,24 +11,17 @@ class Loan {
   final DateTime loanDateTime;
   static final formatter = intl.DateFormat('dd/MM/yyyy');
 
+  bool get isLate => DateTime.now().isAfter(returnDateTime);
+  String get formattedTitle => Utils.beautifyTitle(title);
+  String get formattedReturnDate => formatter.format(returnDateTime);
+  String get formattedLoanDate => formatter.format(loanDateTime);
+
   const Loan(
     this.kind,
     this.title,
     this.returnDateTime,
     this.loanDateTime,
   );
-
-  bool isLate() {
-    return DateTime.now().isAfter(returnDateTime);
-  }
-
-  String formattedReturnDate() {
-    return formatter.format(returnDateTime);
-  }
-
-  String formattedLoanDate() {
-    return formatter.format(loanDateTime);
-  }
 
   Map<String, dynamic> toJson() {
     return {
@@ -122,6 +117,7 @@ class Loan {
     // Skip first row - it's header
     for (int i = 1; i < rows.length; ++i) {
       final cols = rows[i].children;
+
       loans.add(Loan(
         cols[0].text,
         cols[1].text,

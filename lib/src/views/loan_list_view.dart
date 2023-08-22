@@ -60,7 +60,7 @@ class LoanListView extends StatelessAbstractView {
         final loan = settings.session!.loans![index];
         TextStyle? style;
 
-        if (loan.isLate()) {
+        if (loan.isLate) {
           style = const TextStyle(
             color: AbstractView.lateColor,
             fontWeight: FontWeight.bold,
@@ -72,11 +72,11 @@ class LoanListView extends StatelessAbstractView {
             'assets/images/${loan.kind}.png',
           ),
           title: Text(
-            loan.title.replaceFirst(' - ', '\n'),
+            loan.formattedTitle,
             style: style,
           ),
           subtitle: Text(
-            loan.formattedReturnDate(),
+            loan.formattedReturnDate,
             textAlign: TextAlign.right,
           ),
           onTap: () {

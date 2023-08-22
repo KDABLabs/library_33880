@@ -52,7 +52,7 @@ class LoanDetailsView extends StatelessAbstractView {
       fontWeight: FontWeight.bold,
     );
 
-    if (loan.isLate()) {
+    if (loan.isLate) {
       style = style.copyWith(
         color: AbstractView.lateColor,
       );
@@ -67,7 +67,7 @@ class LoanDetailsView extends StatelessAbstractView {
               'assets/images/${loan.kind}.png',
             ),
             Text(
-              loan.title.replaceFirst(' - ', '\n'),
+              loan.formattedTitle,
               style: style,
               textAlign: TextAlign.center,
             ),
@@ -79,7 +79,7 @@ class LoanDetailsView extends StatelessAbstractView {
                   'Loan Date:',
                 ),
                 Text(
-                  loan.formattedLoanDate(),
+                  loan.formattedLoanDate,
                   textAlign: TextAlign.right,
                 ),
               ],
@@ -91,7 +91,7 @@ class LoanDetailsView extends StatelessAbstractView {
                   'Return Date:',
                 ),
                 Text(
-                  loan.formattedReturnDate(),
+                  loan.formattedReturnDate,
                   textAlign: TextAlign.right,
                 ),
               ],
