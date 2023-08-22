@@ -1,9 +1,11 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../account/account.dart';
 import '../account/information.dart';
+import '../account/session.dart';
 import '../constants.dart';
 import '../settings/settings_controller.dart';
 
@@ -148,9 +150,7 @@ abstract mixin class AbstractView {
               'Search',
             ),
             titleTextStyle: entryStyle,
-            onTap: () {
-              Navigator.pop(context);
-            },
+            onTap: () => launchUrl(Session.searchUri()),
           ),
           Visibility(
             visible: !settings.accountExpanded &&
