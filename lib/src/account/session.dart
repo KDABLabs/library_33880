@@ -26,8 +26,28 @@ class Session {
               'viewed_cookie_policy': 'yes'
             };
 
-  String apiHost() {
+  static String apiHost() {
     return 'bibliotheques.cdc-portesentredeuxmers.fr';
+  }
+
+  static Uri loginUri() {
+    return Uri.https(apiHost(), 'cassioweb/account/login');
+  }
+
+  static Uri logoutUri() {
+    return Uri.https(apiHost(), 'cassioweb/account/logout');
+  }
+
+  static Uri extendUri() {
+    return Uri.https(apiHost(), 'cassioweb/extend');
+  }
+
+  static Uri accountUri() {
+    return Uri.https(apiHost(), 'cassioweb/index.php/account');
+  }
+
+  static Uri searchUri() {
+    return Uri.https(apiHost(), '/cassioweb/search');
   }
 
   String cookiesAsString() {
@@ -46,22 +66,6 @@ class Session {
     });
 
     return result.toString();
-  }
-
-  Uri loginUri() {
-    return Uri.https(apiHost(), 'cassioweb/account/login');
-  }
-
-  Uri logoutUri() {
-    return Uri.https(apiHost(), 'cassioweb/account/logout');
-  }
-
-  Uri extendUri() {
-    return Uri.https(apiHost(), 'cassioweb/extend');
-  }
-
-  Uri accountUri() {
-    return Uri.https(apiHost(), 'cassioweb/index.php/account');
   }
 
   Future<bool> logIn() async {
