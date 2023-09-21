@@ -33,3 +33,8 @@ apps](https://flutter.dev/docs/development/accessibility-and-localization/intern
 
 - Allow to remove accounts from settings view
 - Report http erros to passive notification
+
+## Icons
+
+KDE Breeze - LGPL
+https://pxhere.com/en/photo/1039926 - Libre

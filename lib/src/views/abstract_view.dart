@@ -53,13 +53,13 @@ abstract mixin class AbstractView {
               duration: const Duration(
                 milliseconds: 750,
               ),
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(
-                    'assets/images/logo-edm.png',
-                  ),
-                ),
-              ),
+              // decoration: const BoxDecoration(
+              //   image: DecorationImage(
+              //     image: AssetImage(
+              //       'assets/images/flutter_logo.png',
+              //     ),
+              //   ),
+              // ),
             ),
             arrowColor: const Color(
               0xff000000,
