@@ -56,47 +56,52 @@ class LoanListView extends StatelessAbstractView {
     // In contrast to the default ListView constructor, which requires
     // building all Widgets up front, the ListView.builder constructor lazily
     // builds Widgets as they’re scrolled into view.
-    return ListView.builder(
-      // Providing a restorationId allows the ListView to restore the
-      // scroll position when a user leaves and returns to the app after it
-      // has been killed while running in the background.
-      restorationId: 'loanListView',
-      itemCount: settings.session!.loans!.length,
-      itemBuilder: (BuildContext context, int index) {
-        final loan = settings.session!.loans![index];
-        TextStyle? style;
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ListView.builder(
+        // Providing a restorationId allows the ListView to restore the
+        // scroll position when a user leaves and returns to the app after it
+        // has been killed while running in the background.
+        restorationId: 'loanListView',
+        itemCount: settings.session!.loans!.length,
+        itemBuilder: (BuildContext context, int index) {
+          final loan = settings.session!.loans![index];
+          TextStyle? style;
 
-        if (loan.isLate) {
-          style = const TextStyle(
-            color: AbstractView.lateColor,
-            fontWeight: FontWeight.bold,
-          );
-        }
-
-        return ListTile(
-          leading: Image.asset(
-            'assets/images/${loan.kind}.png',
-          ),
-          title: Text(
-            loan.formattedTitle,
-            style: style,
-          ),
-          subtitle: Text(
-            loan.formattedReturnDate,
-            textAlign: TextAlign.right,
-          ),
-          onTap: () {
-            // Navigate to the details page. If the user leaves and returns to
-            // the app after it has been killed while running in the
-            // background, the navigation stack is restored.
-            Navigator.restorablePushNamed(
-              context,
-              ConstantsRoutes.loanDetails,
-              arguments: loan.title,
+          if (loan.isLate) {
+            style = const TextStyle(
+              color: AbstractView.lateColor,
+              fontWeight: FontWeight.bold,
             );
-          },
-        );
-      },
+          }
+
+          return Card(
+            child: ListTile(
+              leading: Image.asset(
+                'assets/images/${loan.kind}.png',
+              ),
+              title: Text(
+                loan.formattedTitle,
+                style: style,
+              ),
+              subtitle: Text(
+                loan.formattedReturnDate,
+                textAlign: TextAlign.right,
+              ),
+              onTap: () {
+                // Navigate to the details page. If the user leaves and returns to
+                // the app after it has been killed while running in the
+                // background, the navigation stack is restored.
+                Navigator.restorablePushNamed(
+                  context,
+                  ConstantsRoutes.loanDetails,
+                  arguments: loan.title,
+                );
+              },
+            ),
+          );
+        },
+      ),
     );
   }
 
