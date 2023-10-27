@@ -60,67 +60,70 @@ class ReservationDetailsView extends StatelessAbstractView {
 
     return Padding(
       padding: const EdgeInsets.all(16.0),
-      child: Center(
-        child: Column(
-          children: [
-            Image.asset(
-              'assets/images/R.png',
-            ),
-            Text(
-              reservation.formattedTitle,
-              style: style,
-              textAlign: TextAlign.center,
-            ),
-            const Divider(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Reservation Date:',
-                ),
-                Text(
-                  reservation.formattedReservationDate,
-                  textAlign: TextAlign.right,
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Expiration Date:',
-                ),
-                Text(
-                  reservation.formattedExpirationDate,
-                  textAlign: TextAlign.right,
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Availability:',
-                ),
-                Text(
-                  reservation.formattedAvailability,
-                  textAlign: TextAlign.right,
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Location:',
-                ),
-                Text(
-                  reservation.location,
-                  textAlign: TextAlign.right,
-                ),
-              ],
-            ),
-          ],
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              Image.asset(
+                'assets/images/R.png',
+              ),
+              Text(
+                reservation.formattedTitle,
+                style: style,
+                textAlign: TextAlign.center,
+              ),
+              const Divider(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Reservation Date:',
+                  ),
+                  Text(
+                    reservation.formattedReservationDate,
+                    textAlign: TextAlign.right,
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Expiration Date:',
+                  ),
+                  Text(
+                    reservation.formattedExpirationDate,
+                    textAlign: TextAlign.right,
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Availability:',
+                  ),
+                  Text(
+                    reservation.formattedAvailability,
+                    textAlign: TextAlign.right,
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Location:',
+                  ),
+                  Text(
+                    reservation.location,
+                    textAlign: TextAlign.right,
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

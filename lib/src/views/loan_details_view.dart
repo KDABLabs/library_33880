@@ -60,43 +60,46 @@ class LoanDetailsView extends StatelessAbstractView {
 
     return Padding(
       padding: const EdgeInsets.all(16.0),
-      child: Center(
-        child: Column(
-          children: [
-            Image.asset(
-              'assets/images/${loan.kind}.png',
-            ),
-            Text(
-              loan.formattedTitle,
-              style: style,
-              textAlign: TextAlign.center,
-            ),
-            const Divider(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Loan Date:',
-                ),
-                Text(
-                  loan.formattedLoanDate,
-                  textAlign: TextAlign.right,
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Return Date:',
-                ),
-                Text(
-                  loan.formattedReturnDate,
-                  textAlign: TextAlign.right,
-                ),
-              ],
-            ),
-          ],
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              Image.asset(
+                'assets/images/${loan.kind}.png',
+              ),
+              Text(
+                loan.formattedTitle,
+                style: style,
+                textAlign: TextAlign.center,
+              ),
+              const Divider(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Loan Date:',
+                  ),
+                  Text(
+                    loan.formattedLoanDate,
+                    textAlign: TextAlign.right,
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Return Date:',
+                  ),
+                  Text(
+                    loan.formattedReturnDate,
+                    textAlign: TextAlign.right,
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
