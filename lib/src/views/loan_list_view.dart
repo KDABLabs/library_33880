@@ -43,7 +43,7 @@ class LoanListView extends StatelessAbstractView {
     }
 
     if (session.information == null) {
-      return InformativeEmptyView('Syncing...');
+      return InformativeEmptyView('Syncing...', spin: true);
     }
 
     if (session.loans == null || session.loans!.isEmpty) {

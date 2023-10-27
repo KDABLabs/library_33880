@@ -43,7 +43,7 @@ class ReservationListView extends StatelessAbstractView {
     }
 
     if (session.information == null) {
-      return InformativeEmptyView('Syncing...');
+      return InformativeEmptyView('Syncing...', spin: true);
     }
 
     if (session.reservations == null || session.reservations!.isEmpty) {
