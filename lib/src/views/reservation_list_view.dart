@@ -13,7 +13,7 @@ class ReservationListView extends StatelessAbstractView {
   });
 
   @override
-  AppBar buildAppBar(BuildContext context) {
+  AppBar? buildAppBar(BuildContext context) {
     return AppBar(
       title: const Text('Reservations'),
       actions: [

@@ -16,7 +16,7 @@ class LoanDetailsView extends StatelessAbstractView {
   });
 
   @override
-  AppBar buildAppBar(BuildContext context) {
+  AppBar? buildAppBar(BuildContext context) {
     return AppBar(
       title: const Text('Loan Details'),
       actions: [
@@ -41,7 +41,7 @@ class LoanDetailsView extends StatelessAbstractView {
       DateTime.now(),
       DateTime.now(),
     );
-    final settings = context.read<SettingsController>();
+    final settings = context.watch<SettingsController>();
     final loans = settings.session?.loans;
     final loan = loans?.firstWhere(
           (loan) => loan.title == title,

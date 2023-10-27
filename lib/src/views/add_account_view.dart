@@ -13,105 +13,12 @@ class AddAccountView extends StatefulAbstractView {
   });
 
   @override
-  AppBar buildAppBar(BuildContext context) {
-    return AppBar(
-      title: const Text('Add Account'),
-      actions: [
-        IconButton(
-          icon: const Icon(Icons.settings),
-          onPressed: () {
-            Navigator.restorablePushNamed(context, ConstantsRoutes.settings);
-          },
-        ),
-      ],
-    );
-  }
-
-  @override
-  Widget buildBody(BuildContext context) {
-    final state = context.read<AddAccountViewState>();
-
-    return Form(
-      key: state.formKey,
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            TextFormField(
-              decoration: const InputDecoration(
-                hintText: 'Enter account display name',
-              ),
-              controller: state.displayNameController,
-            ),
-            TextFormField(
-              decoration: const InputDecoration(
-                hintText: 'Enter account identifier',
-              ),
-              controller: state.loginController,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter your account identifier';
-                }
-                return null;
-              },
-            ),
-            TextFormField(
-              decoration: const InputDecoration(
-                hintText: 'Enter account password',
-              ),
-              controller: state.passwordController,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter your account password';
-                }
-                return null;
-              },
-            ),
-            ColorPicker(
-              color: state.color,
-              enableShadesSelection: false,
-              onColorChanged: (Color value) {
-                state.color = value;
-              },
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              child: ElevatedButton(
-                onPressed: () {
-                  if (state.formKey.currentState!.validate()) {
-                    final settings = context.read<SettingsController>();
-
-                    settings.addAccount(Account(
-                      state.displayNameController.text,
-                      state.loginController.text,
-                      state.passwordController.text,
-                      state.color,
-                    ));
-
-                    Navigator.of(context)
-                        .pushNamedAndRemoveUntil('', (Route route) => false);
-
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Account added!')),
-                    );
-                  }
-                },
-                child: const Text('Submit'),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  @override
-  AddAccountViewState createState() {
-    return AddAccountViewState();
+  State<AddAccountView> createState() {
+    return _AddAccountViewState();
   }
 }
 
-class AddAccountViewState extends State<AddAccountView> {
+class _AddAccountViewState extends AbstractViewState<AddAccountView> {
   final formKey = GlobalKey<FormState>();
   final TextEditingController displayNameController = TextEditingController();
   final TextEditingController loginController = TextEditingController();
@@ -127,12 +34,90 @@ class AddAccountViewState extends State<AddAccountView> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Provider.value(
-      value: this,
-      builder: (BuildContext context, Widget? child) {
-        return widget.build(context);
-      },
+  AppBar? buildAppBar(BuildContext context) {
+    return AppBar(
+      title: const Text('Add Account'),
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.settings),
+          onPressed: () {
+            Navigator.restorablePushNamed(context, ConstantsRoutes.settings);
+          },
+        ),
+      ],
+    );
+  }
+
+  @override
+  Widget buildBody(BuildContext context) {
+    return Form(
+      key: formKey,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            TextFormField(
+              decoration: const InputDecoration(
+                hintText: 'Enter account display name',
+              ),
+              controller: displayNameController,
+            ),
+            TextFormField(
+              decoration: const InputDecoration(
+                hintText: 'Enter account identifier',
+              ),
+              controller: loginController,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter your account identifier';
+                }
+                return null;
+              },
+            ),
+            TextFormField(
+              decoration: const InputDecoration(
+                hintText: 'Enter account password',
+              ),
+              controller: passwordController,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter your account password';
+                }
+                return null;
+              },
+            ),
+            ColorPicker(
+              color: color,
+              enableShadesSelection: false,
+              onColorChanged: (Color value) {
+                color = value;
+              },
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: ElevatedButton(
+                onPressed: () {
+                  if (formKey.currentState!.validate()) {
+                    final settings = context.read<SettingsController>();
+
+                    settings.addAccount(Account(
+                      displayNameController.text,
+                      loginController.text,
+                      passwordController.text,
+                      color,
+                    ));
+
+                    Navigator.of(context)
+                        .pushNamedAndRemoveUntil('', (Route route) => false);
+                    showMessage('Account added!');
+                  }
+                },
+                child: const Text('Submit'),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

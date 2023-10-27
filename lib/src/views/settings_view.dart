@@ -72,7 +72,7 @@ class AccountsListView extends StatefulWidget {
   State<AccountsListView> createState() => _AccountsListViewState();
 }
 
-class _AccountsListViewState extends State<AccountsListView> {
+class _AccountsListViewState extends AbstractWidgetState<AccountsListView> {
   @override
   Widget build(BuildContext context) {
     final SettingsController settings = context.watch<SettingsController>();
@@ -105,10 +105,7 @@ class _AccountsListViewState extends State<AccountsListView> {
                 tooltip: 'Remove ${account.displayName}',
                 onPressed: () {
                   settings.removeAccount(index);
-
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Account removed!')),
-                  );
+                  showMessage('Account removed!');
                 },
               ),
             ],

@@ -16,7 +16,7 @@ class ReservationDetailsView extends StatelessAbstractView {
   });
 
   @override
-  AppBar buildAppBar(BuildContext context) {
+  AppBar? buildAppBar(BuildContext context) {
     return AppBar(
       title: const Text('Reservation Details'),
       actions: [
@@ -41,7 +41,7 @@ class ReservationDetailsView extends StatelessAbstractView {
       'N/A',
       '-',
     );
-    final settings = context.read<SettingsController>();
+    final settings = context.watch<SettingsController>();
     final reservations = settings.session?.reservations;
     final reservation = reservations?.firstWhere(
           (reservation) => reservation.title == title,

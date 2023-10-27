@@ -12,6 +12,30 @@ import '../settings/settings_controller.dart';
 abstract mixin class AbstractView {
   static const Color lateColor = Color(0xFFFF0000);
 
+  Future<void> sync(BuildContext context) async {
+    debugPrint('Refreshing...');
+    context.read<SettingsController>().sync();
+  }
+
+  Future<void> showAboutDialog(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Entre-deux-mers Library'),
+          content: const Text(
+              'Media manager application for libraries of Entre-deux-mers.'),
+          actions: [
+            TextButton(
+              child: const Text('Ok'),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Drawer? buildDrawer(BuildContext context) {
     final route = ModalRoute.of(context)?.settings.name ?? '';
 
@@ -220,7 +244,7 @@ abstract mixin class AbstractView {
     );
   }
 
-  AppBar buildAppBar(BuildContext context);
+  AppBar? buildAppBar(BuildContext context);
 
   Widget buildBody(BuildContext context);
 
@@ -229,12 +253,11 @@ abstract mixin class AbstractView {
   }
 
   Widget build(BuildContext context) {
-    final settings = context.read<SettingsController>();
-
     return Scaffold(
       drawer: buildDrawer(context),
       appBar: buildAppBar(context),
       body: RefreshIndicator(
+        onRefresh: () async => sync(context),
         child: ScrollConfiguration(
           behavior: ScrollConfiguration.of(context).copyWith(
             dragDevices: {
@@ -244,10 +267,6 @@ abstract mixin class AbstractView {
           ),
           child: buildBody(context),
         ),
-        onRefresh: () async {
-          debugPrint('Refreshing...');
-          settings.sync();
-        },
       ),
       floatingActionButton: buildFloatingAction(context),
     );
@@ -258,6 +277,19 @@ abstract class StatelessAbstractView extends StatelessWidget with AbstractView {
   const StatelessAbstractView({super.key});
 }
 
-abstract class StatefulAbstractView extends StatefulWidget with AbstractView {
+abstract class StatefulAbstractView extends StatefulWidget {
   const StatefulAbstractView({super.key});
 }
+
+abstract class AbstractWidgetState<T extends StatefulWidget> extends State<T> {
+  void showMessage(String message, {bool error = false}) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(message),
+      duration: const Duration(seconds: 2),
+      backgroundColor: error ? Colors.red : Colors.blue,
+    ));
+  }
+}
+
+abstract class AbstractViewState<T extends StatefulAbstractView>
+    extends AbstractWidgetState<T> with AbstractView {}
