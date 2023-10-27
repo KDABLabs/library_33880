@@ -4,6 +4,7 @@ class InformativeEmptyView extends LayoutBuilder {
   InformativeEmptyView(
     String message, {
     super.key,
+    bool spin = false,
   }) : super(
           builder: (context, constraints) => SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
@@ -13,8 +14,18 @@ class InformativeEmptyView extends LayoutBuilder {
                 minHeight: constraints.maxHeight,
               ),
               child: Center(
-                child: Text(
-                  message,
+                child: Column(
+                  children: [
+                    Text(
+                      message,
+                    ),
+                    Visibility(
+                        visible: spin,
+                        child: const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: CircularProgressIndicator(),
+                        )),
+                  ],
                 ),
               ),
             ),
