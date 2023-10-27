@@ -103,6 +103,11 @@ class LoanListView extends StatelessAbstractView {
   @override
   FloatingActionButton? buildFloatingAction(BuildContext context) {
     final settings = context.read<SettingsController>();
+    final session = settings.session;
+
+    if (session == null || session.loans == null || session.loans!.isEmpty) {
+      return null;
+    }
 
     return FloatingActionButton(
       onPressed: () {
