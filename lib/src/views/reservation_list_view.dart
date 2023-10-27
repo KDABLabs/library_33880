@@ -38,9 +38,15 @@ class ReservationListView extends StatelessAbstractView {
     final settings = context.watch<SettingsController>();
     final session = settings.session;
 
-    if (session == null || session.reservations == null) {
+    if (session == null) {
       return InformativeEmptyView('No valid session yet...');
-    } else if (session.reservations!.isEmpty) {
+    }
+
+    if (session.information == null) {
+      return InformativeEmptyView('Syncing...');
+    }
+
+    if (session.reservations == null || session.reservations!.isEmpty) {
       return InformativeEmptyView('There is no reservation in your library');
     }
 

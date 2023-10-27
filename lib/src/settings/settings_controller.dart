@@ -35,18 +35,21 @@ class SettingsController with ChangeNotifier {
     _setCurrentAccount(currentAccount);
   }
 
-  void sync() {
+  Future<void> sync() async {
     if (_session != null) {
+      _session = null;
+      notifyListeners();
+      _session = Session(currentAccount!);
+      notifyListeners();
       _session!.logIn().then(
         (ok) {
+          notifyListeners();
           if (ok) {
             session!.sync().then(
               (ok) {
                 notifyListeners();
               },
             );
-          } else {
-            notifyListeners();
           }
         },
       );

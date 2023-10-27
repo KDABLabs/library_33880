@@ -14,7 +14,7 @@ abstract mixin class AbstractView {
 
   Future<void> sync(BuildContext context) async {
     debugPrint('Refreshing...');
-    context.read<SettingsController>().sync();
+    return context.read<SettingsController>().sync();
   }
 
   Future<void> showAboutDialog(BuildContext context) {

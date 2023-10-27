@@ -38,9 +38,15 @@ class LoanListView extends StatelessAbstractView {
     final settings = context.watch<SettingsController>();
     final session = settings.session;
 
-    if (session == null || session.loans == null) {
+    if (session == null) {
       return InformativeEmptyView('No valid session yet...');
-    } else if (session.loans!.isEmpty) {
+    }
+
+    if (session.information == null) {
+      return InformativeEmptyView('Syncing...');
+    }
+
+    if (session.loans == null || session.loans!.isEmpty) {
       return InformativeEmptyView('There is no loan in your library');
     }
 
