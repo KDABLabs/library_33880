@@ -17,25 +17,6 @@ abstract mixin class AbstractView {
     return context.read<SettingsController>().sync();
   }
 
-  Future<void> showAboutDialog(BuildContext context) {
-    return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Entre-deux-mers Library'),
-          content: const Text(
-              'Media manager application for libraries of Entre-deux-mers.'),
-          actions: [
-            TextButton(
-              child: const Text('Ok'),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   Drawer? buildDrawer(BuildContext context) {
     final route = ModalRoute.of(context)?.settings.name ?? '';
 
@@ -237,6 +218,22 @@ abstract mixin class AbstractView {
                   titleTextStyle: entryStyle,
                 ),
               ],
+            ),
+          ),
+          AboutListTile(
+            icon: const Icon(Icons.help),
+            applicationName: 'Entre-deux-mers Libraries',
+            applicationVersion: '1.0.0',
+            applicationLegalese: 'Open Source GPL3',
+            applicationIcon: const Icon(Icons.library_books),
+            aboutBoxChildren: const [
+              Text(
+                'Media manager application for libraries of Entre-deux-mers.',
+              ),
+            ],
+            child: Text(
+              'About...',
+              style: entryStyle,
             ),
           ),
         ],
