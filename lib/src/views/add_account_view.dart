@@ -54,7 +54,7 @@ class _AddAccountViewState extends AbstractViewState<AddAccountView> {
       key: formKey,
       child: Padding(
         padding: const EdgeInsets.all(16),
-        child: Column(
+        child: ListView(
           children: [
             TextFormField(
               decoration: const InputDecoration(
