@@ -87,8 +87,8 @@ class _AddAccountViewState extends AbstractViewState<AddAccountView> {
               },
             ),
             ColorPicker(
+              padding: const EdgeInsets.only(top: 16),
               color: color,
-              enableShadesSelection: false,
               onColorChanged: (Color value) {
                 color = value;
               },
