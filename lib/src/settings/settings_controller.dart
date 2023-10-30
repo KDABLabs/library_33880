@@ -164,6 +164,17 @@ class SettingsController with ChangeNotifier {
     _setAccountsAndCurrentAccount(newAccounts, currentLogin);
   }
 
+  Future<void> setAccountColorAt(int index, Color color) async {
+    RangeError.checkValidIndex(index, accounts);
+
+    final String currentLogin = currentAccount?.login ?? '';
+    Accounts newAccounts = Accounts.from(accounts);
+
+    newAccounts[index].color = color;
+
+    _setAccountsAndCurrentAccount(newAccounts, currentLogin);
+  }
+
   bool get accountExpanded => _accountExpanded;
 
   void setAccountExpanded(bool expanded) {

@@ -1,12 +1,12 @@
 import 'dart:ui';
 
 class Account {
-  final String displayName;
+  String displayName;
   final String login;
   final String password;
-  final Color color;
+  Color color;
   
-  const Account(
+  Account(
     this.displayName,
     this.login,
     this.password,
