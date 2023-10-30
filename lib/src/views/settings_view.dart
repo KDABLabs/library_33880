@@ -75,6 +75,15 @@ class AccountsListView extends StatefulWidget {
 }
 
 class _AccountsListViewState extends AbstractWidgetState<AccountsListView> {
+  Future<void> changeColorAt(int index, Color color) async {
+    final SettingsController settings = context.read<SettingsController>();
+    final result = await showColorPickerDialog(context, color);
+
+    if (result != color) {
+      settings.setAccountColorAt(index, result);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final SettingsController settings = context.watch<SettingsController>();
@@ -91,54 +100,44 @@ class _AccountsListViewState extends AbstractWidgetState<AccountsListView> {
       itemBuilder: (BuildContext context, int index) {
         final account = settings.accounts[index];
 
-        return Column(
+        return Card(
           key: Key('$index'),
-          children: [
-            Card(
-              color: account.color.withAlpha(80),
-              child: ListTile(
-                leading: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    ColorIndicator(
-                      height: 24,
-                      width: 24,
-                      color: account.color,
-                      borderRadius: 12,
-                      onSelect: () async {
-                        final color =
-                            await showColorPickerDialog(context, account.color);
-
-                        if (color != account.color) {
-                          settings.setAccountColorAt(index, color);
-                        }
-                      },
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.delete_forever),
-                      iconSize: 28,
-                      hoverColor: Colors.transparent,
-                      tooltip: 'Remove ${account.displayName}',
-                      onPressed: () {
-                        settings.removeAccount(index);
-                        showMessage('Account removed!');
-                      },
-                    ),
-                  ],
+          color: account.color.withAlpha(80),
+          child: ListTile(
+            leading: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ColorIndicator(
+                  height: 24,
+                  width: 24,
+                  color: account.color,
+                  borderRadius: 12,
+                  onSelect: () => changeColorAt(index, account.color),
                 ),
-                title: Text(
-                  account.displayName,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                IconButton(
+                  icon: const Icon(Icons.delete_forever),
+                  iconSize: 28,
+                  hoverColor: Colors.transparent,
+                  tooltip: 'Remove ${account.displayName}',
+                  onPressed: () {
+                    settings.removeAccount(index);
+                    showMessage('Account removed!');
+                  },
                 ),
-                subtitle: Text(
-                  account.login,
-                  textAlign: TextAlign.left,
-                ),
-              ),
+              ],
             ),
-          ],
+            title: Text(
+              account.displayName,
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+            subtitle: Text(
+              account.login,
+              textAlign: TextAlign.left,
+            ),
+            onTap: () => changeColorAt(index, account.color),
+          ),
         );
       },
     );
