@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flex_color_picker/flex_color_picker.dart';
 
 import 'abstract_view.dart';
 import '../views/informative_empty_view.dart';
@@ -99,9 +100,19 @@ class _AccountsListViewState extends AbstractWidgetState<AccountsListView> {
                 leading: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    CircleAvatar(
-                      backgroundColor: account.color,
-                      radius: 12,
+                    ColorIndicator(
+                      height: 24,
+                      width: 24,
+                      color: account.color,
+                      borderRadius: 12,
+                      onSelect: () async {
+                        final color =
+                            await showColorPickerDialog(context, account.color);
+
+                        if (color != account.color) {
+                          settings.setAccountColorAt(index, color);
+                        }
+                      },
                     ),
                     IconButton(
                       icon: const Icon(Icons.delete_forever),
