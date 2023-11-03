@@ -1,12 +1,15 @@
 import 'dart:io';
+import 'package:enum_flag/enum_flag.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' as html;
 
 import 'account.dart';
 import 'information.dart';
+import 'result.dart';
 import 'loan.dart';
 import 'reservation.dart';
+import '../constants.dart';
 
 class Session {
   final Account account;
@@ -42,12 +45,16 @@ class Session {
     return Uri.https(apiHost(), 'cassioweb/extend');
   }
 
+  static Uri findUri() {
+    return Uri.https(apiHost(), '/cassioweb/search/find');
+  }
+
   static Uri accountUri() {
     return Uri.https(apiHost(), 'cassioweb/index.php/account');
   }
 
-  static Uri searchUri() {
-    return Uri.https(apiHost(), '/cassioweb/search');
+  static Uri searchUri([Map<String, String>? query]) {
+    return Uri.https(apiHost(), '/cassioweb/index.php/search/index', query);
   }
 
   String cookiesAsString() {
@@ -162,6 +169,63 @@ class Session {
     debugPrint('Sync: Can not get account status');
     return false;
   }
+
+  Future<List<Result>?> resultsPage(
+      {int page = 1, int resultsPerPage = 100}) async {
+    final response = await http.get(
+      searchUri(
+        {
+          'p': page.toString(),
+          'num_config': resultsPerPage.toString(),
+          'kindOfDisplayResuts': 'complete',
+        },
+      ),
+      headers: {
+        'cookie': cookiesAsString(),
+      },
+    );
+
+    final document = html.parse(response.body);
+    return Result.parse(document, false);
+  }
+
+  Future<List<Result>?> search(String search, int criteria) async {
+    final response = await http.post(findUri(), headers: {
+      'cookie': cookiesAsString(),
+      'Content-Type': 'application/x-www-form-urlencoded',
+    }, body: () {
+      final String encodedFieldsName = Uri.encodeComponent('fields-0[]');
+      final String encodedTermsName = Uri.encodeComponent('terms-0');
+      final Iterable<EnumFlag> flags =
+          criteria.getFlags(SearchCriterion.values);
+      final List<String> data = () {
+        List<String> result = flags
+            .map((criteria) =>
+                '$encodedFieldsName=${Uri.encodeComponent(criteria.name.toLowerCase())}')
+            .toList();
+        result.add('$encodedTermsName=${Uri.encodeComponent(search)}');
+        return result;
+      }();
+
+      return data.join('&');
+    }());
+
+    if (response.statusCode != 302) {
+      return Future<List<Result>?>.value();
+    }
+
+    return resultsPage();
+  }
+
+  // <option value='info/sortResultsByTitle'>Titre</option>
+  // <option value='info/sortResultsByAuthors'>Auteurs</option>
+  // <option value='info/sortResultsByEditors'>Editeurs</option>
+  // <option value='info/sortResultsByYear'>Année</option>
+  //
+  // https://bibliotheques.cdc-portesentredeuxmers.fr/cassioweb/info/getMediaWiki?name=McGowan%2C+Keith
+  // https://bibliotheques.cdc-portesentredeuxmers.fr/cassioweb/info/getTopRecommandations?notice=63289
+  // https://bibliotheques.cdc-portesentredeuxmers.fr/cassioweb/results/addToCart/63289
+  // https://bibliotheques.cdc-portesentredeuxmers.fr/cassioweb/results/getTotalCart
 
   void _clear(bool session) {
     if (session) {
