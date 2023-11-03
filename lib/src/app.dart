@@ -11,6 +11,7 @@ import 'views/loan_list_view.dart';
 import 'views/reservation_details_view.dart';
 import 'views/reservation_list_view.dart';
 import 'views/settings_view.dart';
+import 'views/search_view.dart';
 
 /// The Widget that configures your application.
 class MyApp extends StatelessWidget {
@@ -96,6 +97,10 @@ class MyApp extends StatelessWidget {
                     return LoanDetailsView(routeSettings.arguments as String);
                   case ConstantsRoutes.loans:
                     return const LoanListView();
+                  case ConstantsRoutes.searchDetails:
+                  //return LoanDetailsView(routeSettings.arguments as String);
+                  case ConstantsRoutes.search:
+                    return const SearchView();
                   default:
                     {
                       final accounts =

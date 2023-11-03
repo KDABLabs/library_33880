@@ -10,6 +10,8 @@ class ConstantsRoutes {
   static const String reservationDetails = 'reservations/details';
   static const String loans = 'loans';
   static const String loanDetails = 'loans/details';
+  static const String search = 'search';
+  static const String searchDetails = 'search/details';
 }
 
 enum SearchCriterion with EnumFlag {
