@@ -9,46 +9,35 @@ import '../account/result.dart';
 import '../settings/settings_controller.dart';
 
 class SearchView extends StatefulAbstractView {
-  const SearchView({
-    super.key,
-  });
+  const SearchView({super.key});
 
   @override
-  State<SearchView> createState() {
-    return _SearchViewState();
-  }
+  State<SearchView> createState() => _SearchViewState();
 }
 
 class _SearchViewState extends AbstractViewState<SearchView> {
   int searchCriteria = SearchCriterion.All.value;
   String searchTerm = '';
-  Future<List<Result>?>? task;
-
-  final formKey = GlobalKey<FormState>();
-  final TextEditingController searchTermController = TextEditingController();
-
   Set<String> expanded = <String>{};
-
-  @override
-  void initState() {
-    super.initState();
-    searchTermController.text = searchTerm;
-  }
-
-  @override
-  void dispose() {
-    searchTermController.dispose();
-    super.dispose();
-  }
+  Future<List<Result>?>? task;
+  bool busy = false;
+  final formKey = GlobalKey<FormState>();
 
   @override
   Future<void> sync(BuildContext context) async {
-    final settings = context.read<SettingsController>();
-
     setState(() {
+      final settings = context.read<SettingsController>();
+
       searchCriteria = searchCriteria;
-      searchTerm = searchTermController.text;
-      task = settings.session?.search(searchTerm, searchCriteria);
+      searchTerm = searchTerm;
+      expanded = {};
+      busy = true;
+
+      task = settings.session
+          ?.search(searchTerm, searchCriteria)
+          .whenComplete(() => setState(
+                () => busy = false,
+              ));
     });
   }
 
@@ -58,6 +47,7 @@ class _SearchViewState extends AbstractViewState<SearchView> {
       title: const Text('Search'),
       actions: [
         PopupMenuButton<SearchCriterion>(
+          enabled: !busy,
           onSelected: (searchCriterion) {
             if (searchCriteria.hasFlag(searchCriterion)) {
               searchCriteria &= ~searchCriterion.value;
@@ -118,11 +108,13 @@ class _SearchViewState extends AbstractViewState<SearchView> {
         ),
         IconButton(
           icon: const Icon(Icons.search),
-          onPressed: () {
-            if (formKey.currentState!.validate()) {
-              sync(context);
-            }
-          },
+          onPressed: busy
+              ? null
+              : () {
+                  if (formKey.currentState!.validate()) {
+                    sync(context);
+                  }
+                },
         ),
       ],
     );
@@ -137,16 +129,23 @@ class _SearchViewState extends AbstractViewState<SearchView> {
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: TextFormField(
+              enabled: !busy,
               decoration: const InputDecoration(
                 hintText: 'Enter search term',
               ),
-              controller: searchTermController,
+              textInputAction: TextInputAction.search,
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter your search term';
                 }
 
+                searchTerm = value;
                 return null;
+              },
+              onFieldSubmitted: (value) {
+                if (formKey.currentState!.validate()) {
+                  sync(context);
+                }
               },
             ),
           ),
@@ -188,6 +187,10 @@ class _SearchViewState extends AbstractViewState<SearchView> {
                             child: Center(
                               child: Image.network(
                                 result.imageUrl.toString(),
+                                errorBuilder: (BuildContext context,
+                                    Object error, StackTrace? stackTrace) {
+                                  return Image.asset('assets/images/L.png');
+                                },
                               ),
                             )),
                         title: Column(
@@ -229,7 +232,13 @@ class _SearchViewState extends AbstractViewState<SearchView> {
                             Text(
                               result.availableCopies.toString(),
                               textAlign: TextAlign.right,
-                              style: Theme.of(context).textTheme.titleMedium?.copyWith(color: result.availableCopies > 0 ? Colors.green : Colors.red),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium
+                                  ?.copyWith(
+                                      color: result.availableCopies > 0
+                                          ? Colors.green
+                                          : Colors.red),
                             ),
                             Icon(result.summary?.isNotEmpty ?? false
                                 ? Icons.expand_more_outlined
