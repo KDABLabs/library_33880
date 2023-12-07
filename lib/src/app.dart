@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import 'constants.dart';
 import 'settings/settings_controller.dart';
+import 'theme.dart';
 import 'views/add_account_view.dart';
 import 'views/loan_details_view.dart';
 import 'views/loan_list_view.dart';
@@ -61,17 +62,13 @@ class MyApp extends StatelessWidget {
           // Define a light and dark color theme. Then, read the user's
           // preferred ThemeMode (light, dark, or system default) from the
           // SettingsController to display the correct theme.
-          theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(
-              seedColor:
-                  settings.currentAccount?.color ?? const Color(0xFFFFFFFF),
-            ),
+          theme: lightTheme(
+            seedColor:
+                settings.currentAccount?.color ?? const Color(0xFFFFFFFF),
           ),
-          darkTheme: ThemeData.dark().copyWith(
-            colorScheme: ColorScheme.fromSeed(
-              seedColor:
-                  settings.currentAccount?.color ?? const Color(0xFF000000),
-            ),
+          darkTheme: darkTheme(
+            seedColor:
+                settings.currentAccount?.color ?? const Color(0xFF000000),
           ),
           themeMode: settings.themeMode,
 
