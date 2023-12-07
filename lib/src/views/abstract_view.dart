@@ -85,7 +85,7 @@ abstract mixin class AbstractView {
                     },
                   ),
                 );
-              }).toList(),
+              }),
             ],
           ),
           Visibility(
@@ -107,7 +107,7 @@ abstract mixin class AbstractView {
                       settings.setCurrentAccountIndex(entry.key);
                     },
                   );
-                }).toList(),
+                }),
                 ListTile(
                   leading: const Icon(
                     Icons.person_add,
